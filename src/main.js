@@ -23,7 +23,7 @@ const products = [
     eyebrow: 'Restaurant pricing',
     description:
       'Price menu items using food cost, labor, overhead, waste, packaging, and profit targets.',
-    price: '$29/mo',
+    price: '$19/mo',
     stripeLink:
       import.meta.env.VITE_STRIPE_PRICING_ASSISTANT_LINK ||
       'https://buy.stripe.com/placeholder-pricing-assistant',
@@ -35,7 +35,7 @@ const products = [
     eyebrow: 'Labor scheduling',
     description:
       'Build weekly schedules, estimate labor cost, compare against revenue, and spot over-budget days.',
-    price: '$29/mo',
+    price: '$19/mo',
     stripeLink:
       import.meta.env.VITE_STRIPE_SHIFT_PLANNER_LINK ||
       'https://buy.stripe.com/3cIdRb6MO8Jm3cTbWn5Ne0b',
