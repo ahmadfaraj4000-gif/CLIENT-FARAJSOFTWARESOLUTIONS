@@ -39,7 +39,7 @@ const products = [
     stripeLink:
       import.meta.env.VITE_STRIPE_SHIFT_PLANNER_LINK ||
       'https://buy.stripe.com/3cIdRb6MO8Jm3cTbWn5Ne0b',
-    appLink: '/shift-planner'
+    appLink: '/#/shift-planner'
   },
   {
     id: 'spa-cost-estimator',
@@ -57,7 +57,7 @@ const products = [
 
 const app = document.querySelector('#app');
 
-if (window.location.pathname === '/shift-planner') {
+if (window.location.hash === '#/shift-planner') {
   renderShiftPlannerRoute();
 } else {
   init();
