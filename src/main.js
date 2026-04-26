@@ -195,12 +195,6 @@ function authView() {
           This portal controls access to Faraj Software Solutions web apps.
           Users can create an account, subscribe, and access paid tools from one dashboard.
         </p>
-
-        <div class="mini-grid">
-          <div><strong>3</strong><span>Software tools</span></div>
-          <div><strong>Supabase</strong><span>Auth ready</span></div>
-          <div><strong>Stripe</strong><span>Subscription access</span></div>
-        </div>
       </section>
 
       <section class="auth-card">
