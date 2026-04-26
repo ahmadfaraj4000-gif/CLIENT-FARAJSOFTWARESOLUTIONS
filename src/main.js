@@ -1,5 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import './styles.css';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import ShiftPlanner from './pages/ShiftPlanner.jsx';
+import './pages/ShiftPlanner.css';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -34,8 +38,8 @@ const products = [
     price: '$29/mo',
     stripeLink:
       import.meta.env.VITE_STRIPE_SHIFT_PLANNER_LINK ||
-      'https://buy.stripe.com/cNi4gB9Z04t6eVB3pR5Ne0c',
-    appLink: '/shift-planner-demo.html'
+      'https://buy.stripe.com/3cIdRb6MO8Jm3cTbWn5Ne0b',
+    appLink: '/shift-planner'
   },
   {
     id: 'spa-cost-estimator',
@@ -53,26 +57,86 @@ const products = [
 
 const app = document.querySelector('#app');
 
+if (window.location.pathname === '/shift-planner') {
+  renderShiftPlannerRoute();
+} else {
+  init();
+}
+
 let state = {
   user: null,
   loading: true,
   mode: 'signin',
-  message: ''
+  message: '',
+  subscriptions: {},
+  checkingSubscriptions: false
 };
-
-function isSubscribed(productId) {
-  // Temporary front-end placeholder.
-  // Later this should come from Supabase after Stripe webhook updates the user's subscription row.
-  return localStorage.getItem(`subscribed:${productId}`) === 'true';
-}
-
-function setSubscribed(productId, value) {
-  localStorage.setItem(`subscribed:${productId}`, value ? 'true' : 'false');
-  render();
-}
 
 function html(strings, ...values) {
   return strings.reduce((acc, str, i) => acc + str + (values[i] ?? ''), '');
+}
+
+function productToSubscriptionKey(productId) {
+  if (productId === 'shift-planner') return 'shift_planner';
+  if (productId === 'pricing-assistant') return 'pricing_assistant';
+  if (productId === 'spa-cost-estimator') return 'spa_cost_estimator';
+  return productId.replaceAll('-', '_');
+}
+
+function isSubscribed(productId) {
+  return Boolean(state.subscriptions[productToSubscriptionKey(productId)]);
+}
+
+async function loadSubscriptions() {
+  if (!hasSupabaseConfig || !supabase || !state.user) {
+    state.subscriptions = {};
+    return;
+  }
+
+  state.checkingSubscriptions = true;
+
+  const { data, error } = await supabase
+    .from('subscriptions')
+    .select('product, status, current_period_end')
+    .eq('user_id', state.user.id)
+    .in('status', ['active', 'trialing', 'paid']);
+
+  if (error) {
+    console.error(error);
+    state.message = 'Could not check subscriptions. Make sure your subscriptions table and RLS policies are set up.';
+    state.subscriptions = {};
+    state.checkingSubscriptions = false;
+    return;
+  }
+
+  const activeMap = {};
+
+  (data || []).forEach((row) => {
+    const notExpired =
+      !row.current_period_end ||
+      new Date(row.current_period_end).getTime() > Date.now();
+
+    if (notExpired) {
+      activeMap[row.product] = true;
+    }
+  });
+
+  state.subscriptions = activeMap;
+  state.checkingSubscriptions = false;
+}
+
+function buildStripeUrl(product) {
+  const url = new URL(product.stripeLink);
+
+  if (state.user?.email) {
+    url.searchParams.set('prefilled_email', state.user.email);
+  }
+
+  if (state.user?.id) {
+    url.searchParams.set('client_reference_id', state.user.id);
+  }
+
+  return url.toString();
 }
 
 function render() {
@@ -126,14 +190,14 @@ function authView() {
         <div class="demo-eyebrow">Secure client access</div>
         <h1>Log in to manage your business software.</h1>
         <p>
-          This portal will control access to Faraj Software Solutions web apps.
-          For now, users can create an account and see subscription placeholders before accessing each tool.
+          This portal controls access to Faraj Software Solutions web apps.
+          Users can create an account, subscribe, and access paid tools from one dashboard.
         </p>
 
         <div class="mini-grid">
           <div><strong>3</strong><span>Software tools</span></div>
           <div><strong>Supabase</strong><span>Auth ready</span></div>
-          <div><strong>Stripe</strong><span>Subscriptions next</span></div>
+          <div><strong>Stripe</strong><span>Subscription access</span></div>
         </div>
       </section>
 
@@ -184,8 +248,9 @@ function portalView() {
           <div class="demo-eyebrow">Client Portal</div>
           <h1>Your software dashboard</h1>
           <p>
-            Choose a subscription below. Once Stripe is connected, successful payment will unlock the matching software automatically.
+            Choose a subscription below. Successful payment unlocks the matching software when Stripe updates your Supabase subscription record.
           </p>
+          ${state.message ? `<p class="portal-message">${state.message}</p>` : ''}
         </div>
         <div class="user-pill">
           <span>Signed in as</span>
@@ -198,9 +263,10 @@ function portalView() {
       </section>
 
       <section class="next-box">
-        <h2>Next backend step</h2>
+        <h2>Subscription access</h2>
         <p>
-          After this front end is live, connect Stripe webhooks to Supabase so paid users get marked active in a subscriptions table.
+          Shift Planner access is now checked against Supabase. A user must have an active
+          <strong> shift_planner </strong> subscription row before opening the app.
         </p>
       </section>
     </main>
@@ -221,21 +287,19 @@ function productCard(product) {
       <p>${product.description}</p>
 
       <div class="card-actions">
-        <a class="btn primary" href="${product.stripeLink}" target="_blank" rel="noopener">
+        <a class="btn primary" href="${buildStripeUrl(product)}" target="_blank" rel="noopener">
           Subscribe with Stripe
-          <span class="btn-sub">placeholder link</span>
+          <span class="btn-sub">secure checkout</span>
         </a>
 
         ${
           active
             ? `<a class="btn secondary" href="${product.appLink}">Open App</a>`
-            : `<button class="btn locked" type="button" disabled>Locked until paid</button>`
+            : `<button class="btn locked" type="button" data-locked-product="${product.id}">
+                Locked until paid
+              </button>`
         }
       </div>
-
-      <button class="dev-unlock" data-product="${product.id}" data-active="${active ? 'true' : 'false'}" type="button">
-        ${active ? 'Dev: mark unpaid' : 'Dev: mark paid'}
-      </button>
     </article>
   `;
 }
@@ -253,11 +317,11 @@ function bindEvents() {
 
   document.querySelector('#authForm')?.addEventListener('submit', submitAuth);
 
-  document.querySelectorAll('.dev-unlock').forEach((btn) => {
+  document.querySelectorAll('[data-locked-product]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const productId = btn.dataset.product;
-      const active = btn.dataset.active === 'true';
-      setSubscribed(productId, !active);
+      const product = products.find((item) => item.id === btn.dataset.lockedProduct);
+      state.message = `${product?.name || 'This app'} is locked until your subscription is active. If you already paid, refresh the page in a moment.`;
+      render();
     });
   });
 }
@@ -271,7 +335,6 @@ async function submitAuth(event) {
   state.message = '';
 
   if (!hasSupabaseConfig) {
-    // Local preview fallback so you can test the portal layout before Supabase is connected.
     state.user = { email };
     render();
     return;
@@ -293,6 +356,7 @@ async function submitAuth(event) {
     ? 'Account created. Check your email if confirmation is enabled.'
     : '';
 
+  await loadSubscriptions();
   render();
 }
 
@@ -302,6 +366,7 @@ async function signOut() {
   }
 
   state.user = null;
+  state.subscriptions = {};
   state.message = '';
   render();
 }
@@ -311,8 +376,19 @@ async function init() {
     const { data } = await supabase.auth.getSession();
     state.user = data.session?.user || null;
 
-    supabase.auth.onAuthStateChange((_event, session) => {
+    if (state.user) {
+      await loadSubscriptions();
+    }
+
+    supabase.auth.onAuthStateChange(async (_event, session) => {
       state.user = session?.user || null;
+
+      if (state.user) {
+        await loadSubscriptions();
+      } else {
+        state.subscriptions = {};
+      }
+
       state.loading = false;
       render();
     });
@@ -322,4 +398,42 @@ async function init() {
   render();
 }
 
-init();
+async function renderShiftPlannerRoute() {
+  if (!hasSupabaseConfig || !supabase) {
+    app.innerHTML = `<main class="portal-shell"><section class="auth-card"><p>Supabase is not configured.</p></section></main>`;
+    return;
+  }
+
+  const { data } = await supabase.auth.getSession();
+  const user = data.session?.user || null;
+
+  if (!user) {
+    window.location.href = '/';
+    return;
+  }
+
+  const { data: sub, error } = await supabase
+    .from('subscriptions')
+    .select('product, status, current_period_end')
+    .eq('user_id', user.id)
+    .eq('product', 'shift_planner')
+    .in('status', ['active', 'trialing', 'paid'])
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    app.innerHTML = `<main class="portal-shell"><section class="auth-card"><p>${error.message}</p></section></main>`;
+    return;
+  }
+
+  const notExpired =
+    !sub?.current_period_end ||
+    new Date(sub.current_period_end).getTime() > Date.now();
+
+  if (!sub || !notExpired) {
+    window.location.href = '/';
+    return;
+  }
+
+  createRoot(app).render(React.createElement(ShiftPlanner, { user, supabase }));
+}
