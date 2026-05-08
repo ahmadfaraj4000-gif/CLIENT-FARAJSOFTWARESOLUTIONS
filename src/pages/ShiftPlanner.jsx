@@ -450,8 +450,8 @@ export default function ShiftPlanner({ user, supabase }) {
   const tips = useMemo(() => {
     const out = [];
 
-    const addTip = (priority, message) => {
-      out.push({ priority, message });
+    const addTip = (priority, type, title, action) => {
+      out.push({ priority, type, title, action });
     };
 
     const shiftEntries = Object.values(state.shifts);
@@ -466,7 +466,17 @@ export default function ShiftPlanner({ user, supabase }) {
     const openingHour = timeHour(settings.openingTime);
     const busyDays = Array.isArray(settings.busyDays) ? settings.busyDays : [];
 
-    if (!state.employees.length) addTip(100, "Add employees and shifts to see smart scheduling suggestions.");
+    if (!state.employees.length) {
+      return {
+        bestMove: {
+          type: "info",
+          title: "Add employees to unlock labor guidance",
+          action: "Enter employee names, hourly wages, max hours, and availability. Then Shift Planner can flag labor risk, overtime, and coverage gaps.",
+        },
+        items: [],
+        hiddenCount: 0,
+      };
+    }
 
     const employeeHours = {};
     const employeeShiftCounts = {};
@@ -494,12 +504,53 @@ export default function ShiftPlanner({ user, supabase }) {
       const shiftCount = employeeShiftCounts[emp.emp_id] || 0;
       const longShiftCount = employeeLongShiftCounts[emp.emp_id] || 0;
       const maxHours = emp.max_hours || overtimeLimit;
+      const overMax = hrs - maxHours;
+      const overOvertime = hrs - overtimeLimit;
 
-      if (shiftCount > maxConsecutiveDays) addTip(90, `📅 ${emp.name} is scheduled ${shiftCount} days — your setting allows ${maxConsecutiveDays} consecutive days.`);
-      if (hrs > maxHours) addTip(100, `⚠️ ${emp.name} is over max hours by ${(hrs - maxHours).toFixed(1)}h.`);
-      if (hrs > overtimeLimit) addTip(96, `⏰ ${emp.name} is above your overtime threshold of ${overtimeLimit.toFixed(1)}h.`);
-      if (shiftCount > 0 && longShiftCount >= 2) addTip(72, `⏱️ ${emp.name} has ${longShiftCount} long shifts of 10+ hours — watch fatigue and service quality.`);
-      if (state.employees.length > 1 && shiftCount > 0 && hrs < 12) addTip(45, `🧩 ${emp.name} has only ${hrs.toFixed(1)} scheduled hours — check if hours are being spread fairly.`);
+      if (shiftCount > maxConsecutiveDays) {
+        addTip(
+          90,
+          "warning",
+          `${emp.name} is scheduled ${shiftCount} days`,
+          `Your setting allows ${maxConsecutiveDays} consecutive days. Move one shift to another employee or add a day off to reduce burnout risk.`
+        );
+      }
+
+      if (overMax > 0) {
+        addTip(
+          100,
+          "critical",
+          `${emp.name} is ${overMax.toFixed(1)}h over max hours`,
+          `Shorten one shift by ${Math.min(overMax, 4).toFixed(1)}h or move hours to an employee with capacity before saving the schedule.`
+        );
+      }
+
+      if (overOvertime > 0) {
+        addTip(
+          96,
+          "critical",
+          `${emp.name} is above your ${overtimeLimit.toFixed(1)}h overtime threshold`,
+          `Review their longest shift first. Reducing ${overOvertime.toFixed(1)}h would bring this employee back under the overtime target.`
+        );
+      }
+
+      if (shiftCount > 0 && longShiftCount >= 2) {
+        addTip(
+          72,
+          "improve",
+          `${emp.name} has ${longShiftCount} long shifts`,
+          "Consider splitting one 10+ hour shift or adding coverage during the busiest part of the day to protect service quality."
+        );
+      }
+
+      if (state.employees.length > 1 && shiftCount > 0 && hrs < 12) {
+        addTip(
+          45,
+          "info",
+          `${emp.name} has only ${hrs.toFixed(1)} scheduled hours`,
+          "If this is not intentional, use this employee to absorb overtime or high-cost shifts from overloaded team members."
+        );
+      }
     });
 
     metrics.dayCounts.forEach((count, i) => {
@@ -508,15 +559,85 @@ export default function ShiftPlanner({ user, supabase }) {
       const laborCost = metrics.dayCosts[i] || 0;
       const laborPct = revenue > 0 ? laborCost / revenue : 0;
       const targetLaborDollars = revenue > 0 ? revenue * targetLaborPct : 0;
+      const dollarsOverTarget = targetLaborDollars ? laborCost - targetLaborDollars : 0;
+      const avgWage = count > 0 ? laborCost / Math.max(shiftEntries.filter((shift) => shift.day_idx === i).reduce((sum, shift) => sum + shiftHours(shift.start, shift.end), 0), 1) : 0;
+      const hoursToCut = avgWage > 0 && dollarsOverTarget > 0 ? dollarsOverTarget / avgWage : 0;
 
-      if (target && count < target) addTip(95, `👥 ${DAYS[i]} is under coverage by ${target - count} staff based on your minimum staff setting.`);
-      if (target && count > target + 2 && revenue > 0 && laborPct > cautionLaborPct) addTip(82, `📉 ${DAYS[i]} may be overstaffed for expected revenue — ${count} scheduled vs ${target} target.`);
-      if (revenue > 0 && count <= 1 && revenue >= effectiveWeekRevenue / 7 * 1.25) addTip(86, `📈 ${DAYS[i]} looks like a high-revenue day but only has ${count} employee${count === 1 ? "" : "s"} scheduled.`);
-      if (revenue > 0 && laborPct >= dangerLaborPct) addTip(98, `🚨 ${DAYS[i]} labor is at ${(laborPct * 100).toFixed(1)}% of expected revenue — above your ${settings.dangerLaborPercent}% danger setting.`);
-      else if (revenue > 0 && laborPct >= cautionLaborPct) addTip(78, `⚠️ ${DAYS[i]} labor is at ${(laborPct * 100).toFixed(1)}% of expected revenue — above your ${settings.cautionLaborPercent}% caution setting.`);
-      if (targetLaborDollars && laborCost > targetLaborDollars) addTip(74, `🎯 ${DAYS[i]} is ${money(laborCost - targetLaborDollars)} above your ${settings.targetLaborPercent}% target labor budget.`);
-      if (busyDays.includes(i) && count < target + 1) addTip(88, `🔥 ${DAYS[i]} is marked as a busy day. Consider scheduling extra coverage.`);
-      if ((i === 5 || i === 6) && count < target) addTip(84, `🏁 Weekend coverage warning: ${DAYS[i]} is below your minimum staff setting.`);
+      if (target && count < target) {
+        addTip(
+          95,
+          "critical",
+          `${DAYS[i]} is under coverage by ${target - count} staff`,
+          `Add ${target - count} employee${target - count === 1 ? "" : "s"} or lower the coverage target if demand is expected to be lighter than normal.`
+        );
+      }
+
+      if (target && count > target + 2 && revenue > 0 && laborPct > cautionLaborPct) {
+        addTip(
+          82,
+          "warning",
+          `${DAYS[i]} may be overstaffed`,
+          `${count} employees are scheduled vs a target of ${target}. Try removing one shift or shortening one low-priority shift by 2 hours.`
+        );
+      }
+
+      if (revenue > 0 && count <= 1 && revenue >= effectiveWeekRevenue / 7 * 1.25) {
+        addTip(
+          86,
+          "critical",
+          `${DAYS[i]} revenue looks high but coverage is thin`,
+          `Only ${count} employee${count === 1 ? "" : "s"} scheduled. Add coverage during peak hours so labor savings do not create service problems.`
+        );
+      }
+
+      if (revenue > 0 && laborPct >= dangerLaborPct) {
+        addTip(
+          98,
+          "critical",
+          `${DAYS[i]} labor is ${(laborPct * 100).toFixed(1)}% of revenue`,
+          dollarsOverTarget > 0
+            ? `${DAYS[i]} is ${money(dollarsOverTarget)} above your ${settings.targetLaborPercent}% target. Cut about ${hoursToCut.toFixed(1)} labor hours or move coverage to a lower-cost employee.`
+            : `This is above your ${settings.dangerLaborPercent}% danger setting. Review shift length and headcount before publishing.`
+        );
+      } else if (revenue > 0 && laborPct >= cautionLaborPct) {
+        addTip(
+          78,
+          "warning",
+          `${DAYS[i]} labor is nearing the danger zone`,
+          dollarsOverTarget > 0
+            ? `${DAYS[i]} is ${money(dollarsOverTarget)} above target. Shorten one shift or reduce overlap where possible.`
+            : `Labor is ${(laborPct * 100).toFixed(1)}% against your ${settings.cautionLaborPercent}% caution setting. Watch this day closely.`
+        );
+      }
+
+      if (targetLaborDollars && laborCost > targetLaborDollars) {
+        addTip(
+          74,
+          "improve",
+          `${DAYS[i]} is ${money(laborCost - targetLaborDollars)} above target labor budget`,
+          hoursToCut > 0
+            ? `A reduction of roughly ${hoursToCut.toFixed(1)} labor hours would bring this day closer to your ${settings.targetLaborPercent}% target.`
+            : `Review this day for unnecessary overlap or shifts that can be shortened.`
+        );
+      }
+
+      if (busyDays.includes(i) && count < target + 1) {
+        addTip(
+          88,
+          "warning",
+          `${DAYS[i]} is marked busy but has minimal extra coverage`,
+          `Add one additional shift during peak hours or make sure your strongest employee is scheduled during the rush.`
+        );
+      }
+
+      if ((i === 5 || i === 6) && count < target) {
+        addTip(
+          84,
+          "warning",
+          `${DAYS[i]} weekend coverage is below target`,
+          `Weekend demand often needs extra support. Add coverage or confirm projected revenue is low enough to justify lean staffing.`
+        );
+      }
     });
 
     state.employees.forEach((emp) => {
@@ -526,7 +647,14 @@ export default function ShiftPlanner({ user, supabase }) {
         if (!todayShift || !nextDayShift) continue;
         const todayEndHour = timeHour(todayShift.end);
         const nextStartHour = timeHour(nextDayShift.start);
-        if (todayEndHour >= Math.max(closingHour - 1, 20) && nextStartHour <= Math.max(openingHour + 1, 8)) addTip(84, `🌙 ${emp.name} closes ${DAYS[i]} and opens ${DAYS[i + 1]} — consider avoiding a close-to-open shift.`);
+        if (todayEndHour >= Math.max(closingHour - 1, 20) && nextStartHour <= Math.max(openingHour + 1, 8)) {
+          addTip(
+            84,
+            "warning",
+            `${emp.name} has a close-to-open turnaround`,
+            `They close ${DAYS[i]} and open ${DAYS[i + 1]}. Swap one of those shifts to reduce fatigue and missed-start risk.`
+          );
+        }
       }
     });
 
@@ -534,14 +662,44 @@ export default function ShiftPlanner({ user, supabase }) {
       const dayShifts = shiftEntries.filter((shift) => shift.day_idx === i);
       const hasManager = dayShifts.some((shift) => /manager|supervisor|lead|owner|admin/i.test(employeeById[shift.emp_id]?.role || ""));
       const hasCloser = dayShifts.some((shift) => timeHour(shift.end) >= Math.max(closingHour - 1, 20));
-      if (dayShifts.length > 0 && !hasManager) addTip(76, `🧑‍💼 No manager or lead is scheduled on ${day}.`);
-      if (dayShifts.length > 0 && !hasCloser) addTip(70, `🔒 No closer is scheduled on ${day}. Your closing time is ${settings.closingTime}.`);
+      if (dayShifts.length > 0 && !hasManager) {
+        addTip(
+          76,
+          "improve",
+          `No manager or lead is scheduled on ${day}`,
+          "Add a lead, supervisor, owner, or manager role to protect accountability during the shift."
+        );
+      }
+      if (dayShifts.length > 0 && !hasCloser) {
+        addTip(
+          70,
+          "improve",
+          `No closer is scheduled on ${day}`,
+          `Add one employee ending near ${settings.closingTime} or extend an existing shift to cover closing duties.`
+        );
+      }
     });
 
     if (metrics.totalCost > 0) {
       const highestCost = Math.max(...metrics.dayCosts);
       const highestIdx = metrics.dayCosts.indexOf(highestCost);
-      if (highestCost > 0) addTip(55, `💰 Highest-cost day is ${DAYS[highestIdx]} at ${money(highestCost)}. Review it if margins feel tight.`);
+      const revenue = effectiveDayRevenue[highestIdx] || 0;
+      const laborPct = revenue > 0 ? highestCost / revenue : 0;
+      const targetLaborDollars = revenue > 0 ? revenue * targetLaborPct : 0;
+      const overTarget = targetLaborDollars ? highestCost - targetLaborDollars : 0;
+
+      if (highestCost > 0) {
+        addTip(
+          overTarget > 0 ? 89 : 55,
+          overTarget > 0 ? "warning" : "info",
+          `${DAYS[highestIdx]} is your highest labor-cost day`,
+          overTarget > 0
+            ? `${DAYS[highestIdx]} costs ${money(highestCost)} and is ${money(overTarget)} above target. Review this day first for savings.`
+            : revenue > 0
+              ? `${DAYS[highestIdx]} costs ${money(highestCost)} with labor at ${(laborPct * 100).toFixed(1)}%. Keep an eye on this day if revenue changes.`
+              : `${DAYS[highestIdx]} costs ${money(highestCost)}. Add projected revenue to know whether this labor level is healthy.`
+        );
+      }
     }
 
     const scheduledEmployees = state.employees.filter((emp) => (employeeHours[emp.emp_id] || 0) > 0);
@@ -549,29 +707,87 @@ export default function ShiftPlanner({ user, supabase }) {
       const hoursList = scheduledEmployees.map((emp) => employeeHours[emp.emp_id] || 0);
       const maxHours = Math.max(...hoursList);
       const minHours = Math.min(...hoursList);
-      if (maxHours - minHours >= 18) addTip(62, `⚖️ Schedule looks unbalanced — one employee has ${maxHours.toFixed(1)}h while another has ${minHours.toFixed(1)}h.`);
+      if (maxHours - minHours >= 18) {
+        addTip(
+          62,
+          "improve",
+          `Schedule balance looks uneven`,
+          `One employee has ${maxHours.toFixed(1)}h while another has ${minHours.toFixed(1)}h. Move one shift from the highest-hour employee to improve fairness.`
+        );
+      }
     }
 
-    if (weeklyBudget && metrics.totalCost > weeklyBudget) addTip(97, `💵 Weekly labor is ${money(metrics.totalCost - weeklyBudget)} above your payroll budget.`);
+    if (weeklyBudget && metrics.totalCost > weeklyBudget) {
+      const overBudget = metrics.totalCost - weeklyBudget;
+      addTip(
+        97,
+        "critical",
+        `Weekly labor is ${money(overBudget)} over payroll budget`,
+        `Reduce scheduled hours, shorten low-demand shifts, or raise the weekly budget before publishing this schedule.`
+      );
+    }
 
     if (effectiveWeekRevenue && metrics.shiftCount) {
       const weeklyLaborPct = metrics.totalCost / effectiveWeekRevenue;
-      if (weeklyLaborPct >= dangerLaborPct) addTip(99, `🚨 Weekly labor is ${(weeklyLaborPct * 100).toFixed(1)}% of expected revenue — above your ${settings.dangerLaborPercent}% danger setting.`);
-      else if (weeklyLaborPct >= cautionLaborPct) addTip(80, `⚠️ Weekly labor is ${(weeklyLaborPct * 100).toFixed(1)}% of expected revenue — above your ${settings.cautionLaborPercent}% caution setting.`);
-      else if (weeklyLaborPct < targetLaborPct * 0.65) addTip(50, "✅ Labor percentage is lean. Double-check coverage before cutting more hours.");
+      const weeklyTargetDollars = effectiveWeekRevenue * targetLaborPct;
+      const weeklyOverTarget = metrics.totalCost - weeklyTargetDollars;
+
+      if (weeklyLaborPct >= dangerLaborPct) {
+        addTip(
+          99,
+          "critical",
+          `Weekly labor is ${(weeklyLaborPct * 100).toFixed(1)}% of expected revenue`,
+          weeklyOverTarget > 0
+            ? `That is ${money(weeklyOverTarget)} above your ${settings.targetLaborPercent}% target. Start with the highest-cost day and reduce overlap first.`
+            : `This is above your ${settings.dangerLaborPercent}% danger setting. Review coverage and shift length before saving.`
+        );
+      } else if (weeklyLaborPct >= cautionLaborPct) {
+        addTip(
+          80,
+          "warning",
+          `Weekly labor is ${(weeklyLaborPct * 100).toFixed(1)}% of expected revenue`,
+          `You are above the ${settings.cautionLaborPercent}% caution line. Check the highest-cost day before publishing.`
+        );
+      } else if (weeklyLaborPct < targetLaborPct * 0.65) {
+        addTip(
+          50,
+          "info",
+          "Labor percentage is very lean",
+          "Savings look strong, but double-check coverage targets so customer service does not suffer."
+        );
+      }
     }
 
-    if (!out.length) addTip(1, "✅ Schedule looks balanced based on your saved labor settings, expected revenue, and coverage inputs.");
+    if (!out.length) {
+      addTip(
+        1,
+        "success",
+        "Schedule looks balanced",
+        "Labor, coverage, overtime, and employee limits all look reasonable based on your saved settings."
+      );
+    }
 
     const uniqueTips = [];
     const seen = new Set();
     out.sort((a, b) => b.priority - a.priority).forEach((tip) => {
-      if (!seen.has(tip.message)) {
-        seen.add(tip.message);
-        uniqueTips.push(tip.message);
+      const signature = `${tip.title}-${tip.action}`;
+      if (!seen.has(signature)) {
+        seen.add(signature);
+        uniqueTips.push(tip);
       }
     });
-    return uniqueTips.slice(0, 10);
+
+    const bestMove = uniqueTips[0] || {
+      type: "success",
+      title: "Schedule looks balanced",
+      action: "Labor, coverage, overtime, and employee limits all look reasonable based on your saved settings.",
+    };
+
+    return {
+      bestMove,
+      items: uniqueTips.slice(1, 4),
+      hiddenCount: Math.max(uniqueTips.length - 4, 0),
+    };
   }, [state.employees, state.shifts, state.coverage, effectiveDayRevenue, effectiveWeekRevenue, metrics, settings]);
 
   function addEmployee() {
@@ -1529,10 +1745,30 @@ function buildSuggestedSchedule() {
               </div>
 
               <div className="suggestions">
-                <div className="suggestions-title">💡 Smart scheduling suggestions</div>
-                <div className="tip-row">
-                  {tips.map((tip, index) => <span className="tip" key={`${tip}-${index}`}>{tip}</span>)}
+                <div className="suggestions-head">
+                  <div>
+                    <div className="suggestions-title">💡 Smart labor suggestions</div>
+                    <div className="suggestions-subtitle">Showing the best move plus the top priority fixes.</div>
+                  </div>
+                  {tips.hiddenCount > 0 && <span className="suggestions-count">+{tips.hiddenCount} more</span>}
                 </div>
+
+                <div className={`best-move insight-${tips.bestMove.type || "info"}`}>
+                  <div className="best-move-label">Best cost-control move</div>
+                  <strong>{tips.bestMove.title}</strong>
+                  <p>{tips.bestMove.action}</p>
+                </div>
+
+                {tips.items.length > 0 && (
+                  <div className="insight-list">
+                    {tips.items.map((tip, index) => (
+                      <div className={`insight-card insight-${tip.type || "info"}`} key={`${tip.title}-${index}`}>
+                        <strong>{tip.title}</strong>
+                        <p>{tip.action}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </section>
           </div>
