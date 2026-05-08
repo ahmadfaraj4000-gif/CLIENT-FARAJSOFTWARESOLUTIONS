@@ -23,7 +23,7 @@ const products = [
     eyebrow: 'Coming Soon',
     description:
       'Price menu items using food cost, labor, overhead, waste, packaging, and profit targets.',
-    price: '$19/mo',
+    price: '$14.99/mo',
     stripeLink:
       import.meta.env.VITE_STRIPE_PRICING_ASSISTANT_LINK ||
       'https://buy.stripe.com/placeholder-pricing-assistant',
@@ -35,7 +35,7 @@ const products = [
     eyebrow: 'Labor scheduling',
     description:
       'Build weekly schedules, estimate labor cost, compare against revenue, and spot over-budget days.',
-    price: '$19/mo',
+    price: '$14.99/mo',
     stripeLink:
       import.meta.env.VITE_STRIPE_SHIFT_PLANNER_LINK ||
       'https://buy.stripe.com/28E4gBfjk5xa7t9gcD5Ne0e',
@@ -47,7 +47,7 @@ const products = [
     eyebrow: 'Coming soon',
     description:
       'Estimate cost per client by factoring products, rent, supplies, equipment, time, and operating expenses.',
-    price: '$19/mo',
+    price: '$14.99/mo',
     stripeLink:
       import.meta.env.VITE_STRIPE_SPA_CALCULATOR_LINK ||
       'https://buy.stripe.com/placeholder-spa-calculator',
