@@ -567,7 +567,7 @@ export default function ShiftPlanner({ user, supabase }) {
 
       if (target && count < target) {
         addTip(
-          95,
+          82,
           "critical",
           `${DAYS[i]} is under coverage by ${target - count} staff`,
           `Add ${target - count} employee${target - count === 1 ? "" : "s"} or lower the coverage target if demand is expected to be lighter than normal.`
@@ -594,7 +594,7 @@ export default function ShiftPlanner({ user, supabase }) {
 
       if (revenue > 0 && laborPct >= dangerLaborPct) {
         addTip(
-          98,
+          88,
           "critical",
           `${DAYS[i]} labor is ${(laborPct * 100).toFixed(1)}% of revenue`,
           dollarsOverTarget > 0
@@ -603,7 +603,7 @@ export default function ShiftPlanner({ user, supabase }) {
         );
       } else if (revenue > 0 && laborPct >= cautionLaborPct) {
         addTip(
-          78,
+          72,
           "warning",
           `${DAYS[i]} labor is nearing the danger zone`,
           dollarsOverTarget > 0
@@ -614,7 +614,7 @@ export default function ShiftPlanner({ user, supabase }) {
 
       if (targetLaborDollars && laborCost > targetLaborDollars) {
         addTip(
-          74,
+          68,
           "improve",
           `${DAYS[i]} is ${money(laborCost - targetLaborDollars)} above target labor budget`,
           hoursToCut > 0
@@ -733,22 +733,41 @@ export default function ShiftPlanner({ user, supabase }) {
       const weeklyLaborPct = metrics.totalCost / effectiveWeekRevenue;
       const weeklyTargetDollars = effectiveWeekRevenue * targetLaborPct;
       const weeklyOverTarget = metrics.totalCost - weeklyTargetDollars;
+      const dailyOverTarget = metrics.dayCosts.map((cost, i) => {
+      const revenue = effectiveDayRevenue[i] || 0;
+      const targetDollars = revenue > 0 ? revenue * targetLaborPct : 0;
+
+      return {
+        day: DAYS[i],
+        amount: targetDollars > 0 ? cost - targetDollars : 0,
+      };
+    });
+
+    const biggestDriver = dailyOverTarget.reduce(
+      (best, current) => current.amount > best.amount ? current : best,
+      { day: "", amount: 0 }
+    );
+
+    const driverText =
+      biggestDriver.amount > 0
+        ? ` Biggest driver: ${biggestDriver.day} is ${money(biggestDriver.amount)} above target.`
+        : "";
 
       if (weeklyLaborPct >= dangerLaborPct) {
         addTip(
-          99,
+          115,
           "critical",
-          `Weekly labor is ${(weeklyLaborPct * 100).toFixed(1)}% of expected revenue`,
+          `Weekly labor is ${(weeklyLaborPct * 100).toFixed(1)}%, above your ${settings.targetLaborPercent}% target`,
           weeklyOverTarget > 0
-            ? `That is ${money(weeklyOverTarget)} above your ${settings.targetLaborPercent}% target. Start with the highest-cost day and reduce overlap first.`
-            : `This is above your ${settings.dangerLaborPercent}% danger setting. Review coverage and shift length before saving.`
+            ? `You are ${money(weeklyOverTarget)} above your weekly labor target.${driverText} Start there before cutting coverage elsewhere.`
+            : `This is above your ${settings.dangerLaborPercent}% danger setting. Review total weekly labor before focusing on individual days.`
         );
       } else if (weeklyLaborPct >= cautionLaborPct) {
         addTip(
-          80,
+          105,
           "warning",
-          `Weekly labor is ${(weeklyLaborPct * 100).toFixed(1)}% of expected revenue`,
-          `You are above the ${settings.cautionLaborPercent}% caution line. Check the highest-cost day before publishing.`
+          `Weekly labor is ${(weeklyLaborPct * 100).toFixed(1)}%, above your caution line`,
+          `You are above the ${settings.cautionLaborPercent}% caution setting.${driverText} Review weekly labor before making day-by-day cuts.`
         );
       } else if (weeklyLaborPct < targetLaborPct * 0.65) {
         addTip(
@@ -1601,18 +1620,28 @@ function buildSuggestedSchedule() {
 
                 <div className="spacer-9" />
                 <div className="day-input">
-                  <span>Week</span>
+                  <span>{state.revenueMode === "weekly" ? "Week" : "Total"}</span>
                   <input
                     className="field"
-                    value={state.weeklyRevenue || ""}
+                    value={
+                      state.revenueMode === "weekly"
+                        ? state.weeklyRevenue || ""
+                        : effectiveWeekRevenue > 0
+                          ? effectiveWeekRevenue.toFixed(2)
+                          : ""
+                    }
                     onChange={(e) => {
-                      setState((p) => ({ ...p, weeklyRevenue: e.target.value }));
-                      setStatusMessage("Unsaved changes. Press Save Schedule.");
+                      if (state.revenueMode === "weekly") {
+                        setState((p) => ({ ...p, weeklyRevenue: e.target.value }));
+                        setStatusMessage("Unsaved changes. Press Save Schedule.");
+                      }
                     }}
                     type="number"
                     min="0"
                     step="0.01"
                     placeholder="0.00"
+                    readOnly={state.revenueMode !== "weekly"}
+                    title={state.revenueMode === "weekly" ? "Enter weekly revenue" : "Auto-calculated from daily revenue"}
                   />
                 </div>
               </div>
