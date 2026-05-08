@@ -20,7 +20,7 @@ const products = [
   {
     id: 'pricing-assistant',
     name: 'Pricing Assistant',
-    eyebrow: 'Restaurant pricing',
+    eyebrow: 'Coming Soon',
     description:
       'Price menu items using food cost, labor, overhead, waste, packaging, and profit targets.',
     price: '$19/mo',
@@ -44,7 +44,7 @@ const products = [
   {
     id: 'spa-cost-estimator',
     name: 'Spa Cost Estimator',
-    eyebrow: 'Service business costs',
+    eyebrow: 'Coming soon',
     description:
       'Estimate cost per client by factoring products, rent, supplies, equipment, time, and operating expenses.',
     price: '$19/mo',
@@ -256,14 +256,6 @@ function portalView() {
 
       <section class="software-grid">
         ${products.map(productCard).join('')}
-      </section>
-
-      <section class="next-box">
-        <h2>Subscription access</h2>
-        <p>
-          Shift Planner access is now checked against Supabase. A user must have an active
-          <strong> shift_planner </strong> subscription row before opening the app.
-        </p>
       </section>
     </main>
   `;
