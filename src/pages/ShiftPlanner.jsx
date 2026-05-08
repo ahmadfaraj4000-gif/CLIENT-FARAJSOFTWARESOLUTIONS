@@ -25,6 +25,81 @@ const emptyState = {
   currentScheduleName: "",
 };
 
+const DEFAULT_SETTINGS = {
+  targetLaborPercent: 35,
+  cautionLaborPercent: 28,
+  dangerLaborPercent: 35,
+  overtimeThreshold: 40,
+  minimumStaffPerShift: 2,
+  businessType: "General Service",
+  openingTime: "08:00",
+  closingTime: "21:00",
+  maxConsecutiveDays: 6,
+  preferredStrategy: "Balanced",
+  busyDays: [4, 5],
+  weeklyBudget: "",
+};
+
+const BUSINESS_TYPES = [
+  "Restaurant",
+  "Retail",
+  "Auto Shop",
+  "Salon / Spa",
+  "Rental Business",
+  "General Service",
+  "Custom",
+];
+
+const LABOR_STRATEGIES = [
+  "Balanced",
+  "Lean Labor",
+  "High Service Coverage",
+  "Aggressive Cost Saving",
+];
+
+function normalizeSettings(data) {
+  if (!data) return DEFAULT_SETTINGS;
+
+  return {
+    targetLaborPercent: Number(data.target_labor_percent ?? data.targetLaborPercent ?? DEFAULT_SETTINGS.targetLaborPercent),
+    cautionLaborPercent: Number(data.caution_labor_percent ?? data.cautionLaborPercent ?? DEFAULT_SETTINGS.cautionLaborPercent),
+    dangerLaborPercent: Number(data.danger_labor_percent ?? data.dangerLaborPercent ?? DEFAULT_SETTINGS.dangerLaborPercent),
+    overtimeThreshold: Number(data.overtime_threshold ?? data.overtimeThreshold ?? DEFAULT_SETTINGS.overtimeThreshold),
+    minimumStaffPerShift: Number(data.minimum_staff_per_shift ?? data.minimumStaffPerShift ?? DEFAULT_SETTINGS.minimumStaffPerShift),
+    businessType: data.business_type ?? data.businessType ?? DEFAULT_SETTINGS.businessType,
+    openingTime: data.opening_time ?? data.openingTime ?? DEFAULT_SETTINGS.openingTime,
+    closingTime: data.closing_time ?? data.closingTime ?? DEFAULT_SETTINGS.closingTime,
+    maxConsecutiveDays: Number(data.max_consecutive_days ?? data.maxConsecutiveDays ?? DEFAULT_SETTINGS.maxConsecutiveDays),
+    preferredStrategy: data.preferred_strategy ?? data.preferredStrategy ?? DEFAULT_SETTINGS.preferredStrategy,
+    busyDays: Array.isArray(data.busy_days ?? data.busyDays) ? (data.busy_days ?? data.busyDays) : DEFAULT_SETTINGS.busyDays,
+    weeklyBudget: data.weekly_budget ?? data.weeklyBudget ?? DEFAULT_SETTINGS.weeklyBudget,
+  };
+}
+
+function settingsToPayload(settings, userId) {
+  return {
+    user_id: userId,
+    target_labor_percent: num(settings.targetLaborPercent) || DEFAULT_SETTINGS.targetLaborPercent,
+    caution_labor_percent: num(settings.cautionLaborPercent) || DEFAULT_SETTINGS.cautionLaborPercent,
+    danger_labor_percent: num(settings.dangerLaborPercent) || DEFAULT_SETTINGS.dangerLaborPercent,
+    overtime_threshold: num(settings.overtimeThreshold) || DEFAULT_SETTINGS.overtimeThreshold,
+    minimum_staff_per_shift: num(settings.minimumStaffPerShift) || DEFAULT_SETTINGS.minimumStaffPerShift,
+    business_type: settings.businessType || DEFAULT_SETTINGS.businessType,
+    opening_time: settings.openingTime || DEFAULT_SETTINGS.openingTime,
+    closing_time: settings.closingTime || DEFAULT_SETTINGS.closingTime,
+    max_consecutive_days: num(settings.maxConsecutiveDays) || DEFAULT_SETTINGS.maxConsecutiveDays,
+    preferred_strategy: settings.preferredStrategy || DEFAULT_SETTINGS.preferredStrategy,
+    busy_days: Array.isArray(settings.busyDays) ? settings.busyDays : DEFAULT_SETTINGS.busyDays,
+    weekly_budget: settings.weeklyBudget === "" ? null : num(settings.weeklyBudget),
+    updated_at: new Date().toISOString(),
+  };
+}
+
+function timeHour(value) {
+  const hour = Number(String(value || "").split(":")[0]);
+  return Number.isFinite(hour) ? hour : 0;
+}
+
 function money(value) {
   return "$" + Number(value || 0).toLocaleString(undefined, {
     minimumFractionDigits: 2,
@@ -99,6 +174,12 @@ export default function ShiftPlanner({ user, supabase }) {
   const [loadingData, setLoadingData] = useState(true);
   const [saving, setSaving] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
+  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
+  const [settingsForm, setSettingsForm] = useState(DEFAULT_SETTINGS);
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+  const [settingsIntroMode, setSettingsIntroMode] = useState(false);
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
+  const [historyStack, setHistoryStack] = useState([]);
 
   const [employeeForm, setEmployeeForm] = useState({
     name: "",
@@ -114,9 +195,88 @@ export default function ShiftPlanner({ user, supabase }) {
 
   useEffect(() => {
     if (!user?.id) return;
+    loadPlannerSettings();
     loadSchedules();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
+
+  async function loadPlannerSettings() {
+    if (!user?.id) return;
+
+    const { data, error } = await supabase
+      .from("shift_planner_settings")
+      .select("*")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error(error);
+      setSettings(DEFAULT_SETTINGS);
+      setSettingsForm(DEFAULT_SETTINGS);
+      setSettingsLoaded(true);
+      setSettingsIntroMode(true);
+      setSettingsModalOpen(true);
+      setStatusMessage("Settings table not found yet. Run the Shift Planner settings SQL, then save settings again.");
+      return;
+    }
+
+    if (data) {
+      const normalized = normalizeSettings(data);
+      setSettings(normalized);
+      setSettingsForm(normalized);
+      setSettingsIntroMode(false);
+      setSettingsModalOpen(false);
+    } else {
+      setSettings(DEFAULT_SETTINGS);
+      setSettingsForm(DEFAULT_SETTINGS);
+      setSettingsIntroMode(true);
+      setSettingsModalOpen(true);
+    }
+
+    setSettingsLoaded(true);
+  }
+
+  async function savePlannerSettings(event) {
+    event?.preventDefault();
+
+    if (!user?.id) {
+      setStatusMessage("You must be logged in to save settings.");
+      return;
+    }
+
+    const normalized = normalizeSettings(settingsForm);
+
+    if (normalized.cautionLaborPercent > normalized.dangerLaborPercent) {
+      alert("Caution labor % should be lower than or equal to danger labor %.");
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("shift_planner_settings")
+      .upsert(settingsToPayload(normalized, user.id), { onConflict: "user_id" })
+      .select("*")
+      .single();
+
+    if (error) {
+      console.error(error);
+      setStatusMessage("Could not save settings. Run the shift_planner_settings SQL and check RLS policies.");
+      return;
+    }
+
+    const saved = normalizeSettings(data);
+    setSettings(saved);
+    setSettingsForm(saved);
+    setSettingsIntroMode(false);
+    setSettingsModalOpen(false);
+    setSettingsLoaded(true);
+    setStatusMessage("Settings saved. Tips and labor warnings now use your targets.");
+  }
+
+  function openSettingsModal() {
+    setSettingsForm(settings);
+    setSettingsIntroMode(false);
+    setSettingsModalOpen(true);
+  }
 
   async function loadSchedules() {
     setLoadingData(true);
@@ -281,40 +441,138 @@ export default function ShiftPlanner({ user, supabase }) {
     const totalCost = dayCosts.reduce((a, b) => a + b, 0);
     const avg = totalCost / 7;
     const peakIdx = dayCosts.indexOf(Math.max(...dayCosts));
-    const over = dayCosts.filter((c, i) => effectiveDayRevenue[i] > 0 && c > effectiveDayRevenue[i] * 0.3).length;
+    const dangerLaborPct = (num(settings.dangerLaborPercent) || DEFAULT_SETTINGS.dangerLaborPercent) / 100;
+    const over = dayCosts.filter((c, i) => effectiveDayRevenue[i] > 0 && c > effectiveDayRevenue[i] * dangerLaborPct).length;
 
     return { dayCosts, dayCounts, totalHours, shiftCount, totalCost, avg, peakIdx, over };
-  }, [state.shifts, state.employees, effectiveDayRevenue]);
+  }, [state.shifts, state.employees, effectiveDayRevenue, settings.dangerLaborPercent]);
 
   const tips = useMemo(() => {
     const out = [];
-    if (!state.employees.length) out.push("Add employees and shifts to see suggestions.");
+
+    const addTip = (priority, message) => {
+      out.push({ priority, message });
+    };
+
+    const shiftEntries = Object.values(state.shifts);
+    const targetLaborPct = (num(settings.targetLaborPercent) || DEFAULT_SETTINGS.targetLaborPercent) / 100;
+    const cautionLaborPct = (num(settings.cautionLaborPercent) || DEFAULT_SETTINGS.cautionLaborPercent) / 100;
+    const dangerLaborPct = (num(settings.dangerLaborPercent) || DEFAULT_SETTINGS.dangerLaborPercent) / 100;
+    const overtimeLimit = num(settings.overtimeThreshold) || DEFAULT_SETTINGS.overtimeThreshold;
+    const minStaff = num(settings.minimumStaffPerShift) || DEFAULT_SETTINGS.minimumStaffPerShift;
+    const maxConsecutiveDays = num(settings.maxConsecutiveDays) || DEFAULT_SETTINGS.maxConsecutiveDays;
+    const weeklyBudget = num(settings.weeklyBudget);
+    const closingHour = timeHour(settings.closingTime);
+    const openingHour = timeHour(settings.openingTime);
+    const busyDays = Array.isArray(settings.busyDays) ? settings.busyDays : [];
+
+    if (!state.employees.length) addTip(100, "Add employees and shifts to see smart scheduling suggestions.");
+
+    const employeeHours = {};
+    const employeeShiftCounts = {};
+    const employeeLongShiftCounts = {};
+    const employeeById = {};
 
     state.employees.forEach((emp) => {
-      const empShifts = Object.values(state.shifts).filter((s) => s.emp_id === emp.emp_id);
-      const hrs = empShifts.reduce((sum, s) => sum + shiftHours(s.start, s.end), 0);
+      employeeById[emp.emp_id] = emp;
+      employeeHours[emp.emp_id] = 0;
+      employeeShiftCounts[emp.emp_id] = 0;
+      employeeLongShiftCounts[emp.emp_id] = 0;
+    });
 
-      if (empShifts.length === 7) out.push(`📅 ${emp.name} is scheduled 7 days — consider a rest day`);
-      if (hrs > (emp.max_hours || 40)) {
-        out.push(`⚠️ ${emp.name} is over max hours by ${(hrs - (emp.max_hours || 40)).toFixed(1)}h`);
-      }
+    shiftEntries.forEach((shift) => {
+      const emp = employeeById[shift.emp_id];
+      if (!emp) return;
+      const hrs = shiftHours(shift.start, shift.end);
+      employeeHours[emp.emp_id] += hrs;
+      employeeShiftCounts[emp.emp_id] += 1;
+      if (hrs >= 10) employeeLongShiftCounts[emp.emp_id] += 1;
+    });
+
+    state.employees.forEach((emp) => {
+      const hrs = employeeHours[emp.emp_id] || 0;
+      const shiftCount = employeeShiftCounts[emp.emp_id] || 0;
+      const longShiftCount = employeeLongShiftCounts[emp.emp_id] || 0;
+      const maxHours = emp.max_hours || overtimeLimit;
+
+      if (shiftCount > maxConsecutiveDays) addTip(90, `📅 ${emp.name} is scheduled ${shiftCount} days — your setting allows ${maxConsecutiveDays} consecutive days.`);
+      if (hrs > maxHours) addTip(100, `⚠️ ${emp.name} is over max hours by ${(hrs - maxHours).toFixed(1)}h.`);
+      if (hrs > overtimeLimit) addTip(96, `⏰ ${emp.name} is above your overtime threshold of ${overtimeLimit.toFixed(1)}h.`);
+      if (shiftCount > 0 && longShiftCount >= 2) addTip(72, `⏱️ ${emp.name} has ${longShiftCount} long shifts of 10+ hours — watch fatigue and service quality.`);
+      if (state.employees.length > 1 && shiftCount > 0 && hrs < 12) addTip(45, `🧩 ${emp.name} has only ${hrs.toFixed(1)} scheduled hours — check if hours are being spread fairly.`);
     });
 
     metrics.dayCounts.forEach((count, i) => {
-      const target = num(state.coverage[i]);
-      if (target && count < target) out.push(`👥 ${DAYS[i]} is under coverage by ${target - count} staff`);
-      if (effectiveDayRevenue[i] && metrics.dayCosts[i] > effectiveDayRevenue[i] * 0.3) {
-        out.push(`💸 ${DAYS[i]} labor is above 30% of revenue`);
+      const target = num(state.coverage[i]) || minStaff;
+      const revenue = effectiveDayRevenue[i] || 0;
+      const laborCost = metrics.dayCosts[i] || 0;
+      const laborPct = revenue > 0 ? laborCost / revenue : 0;
+      const targetLaborDollars = revenue > 0 ? revenue * targetLaborPct : 0;
+
+      if (target && count < target) addTip(95, `👥 ${DAYS[i]} is under coverage by ${target - count} staff based on your minimum staff setting.`);
+      if (target && count > target + 2 && revenue > 0 && laborPct > cautionLaborPct) addTip(82, `📉 ${DAYS[i]} may be overstaffed for expected revenue — ${count} scheduled vs ${target} target.`);
+      if (revenue > 0 && count <= 1 && revenue >= effectiveWeekRevenue / 7 * 1.25) addTip(86, `📈 ${DAYS[i]} looks like a high-revenue day but only has ${count} employee${count === 1 ? "" : "s"} scheduled.`);
+      if (revenue > 0 && laborPct >= dangerLaborPct) addTip(98, `🚨 ${DAYS[i]} labor is at ${(laborPct * 100).toFixed(1)}% of expected revenue — above your ${settings.dangerLaborPercent}% danger setting.`);
+      else if (revenue > 0 && laborPct >= cautionLaborPct) addTip(78, `⚠️ ${DAYS[i]} labor is at ${(laborPct * 100).toFixed(1)}% of expected revenue — above your ${settings.cautionLaborPercent}% caution setting.`);
+      if (targetLaborDollars && laborCost > targetLaborDollars) addTip(74, `🎯 ${DAYS[i]} is ${money(laborCost - targetLaborDollars)} above your ${settings.targetLaborPercent}% target labor budget.`);
+      if (busyDays.includes(i) && count < target + 1) addTip(88, `🔥 ${DAYS[i]} is marked as a busy day. Consider scheduling extra coverage.`);
+      if ((i === 5 || i === 6) && count < target) addTip(84, `🏁 Weekend coverage warning: ${DAYS[i]} is below your minimum staff setting.`);
+    });
+
+    state.employees.forEach((emp) => {
+      for (let i = 0; i < 6; i += 1) {
+        const todayShift = state.shifts[keyFor(emp.emp_id, i)];
+        const nextDayShift = state.shifts[keyFor(emp.emp_id, i + 1)];
+        if (!todayShift || !nextDayShift) continue;
+        const todayEndHour = timeHour(todayShift.end);
+        const nextStartHour = timeHour(nextDayShift.start);
+        if (todayEndHour >= Math.max(closingHour - 1, 20) && nextStartHour <= Math.max(openingHour + 1, 8)) addTip(84, `🌙 ${emp.name} closes ${DAYS[i]} and opens ${DAYS[i + 1]} — consider avoiding a close-to-open shift.`);
       }
     });
 
-    if (effectiveWeekRevenue && metrics.totalCost / effectiveWeekRevenue < 0.18 && metrics.shiftCount) {
-      out.push("✅ Labor percentage is currently lean. Double-check coverage before cutting more hours.");
+    DAYS.forEach((day, i) => {
+      const dayShifts = shiftEntries.filter((shift) => shift.day_idx === i);
+      const hasManager = dayShifts.some((shift) => /manager|supervisor|lead|owner|admin/i.test(employeeById[shift.emp_id]?.role || ""));
+      const hasCloser = dayShifts.some((shift) => timeHour(shift.end) >= Math.max(closingHour - 1, 20));
+      if (dayShifts.length > 0 && !hasManager) addTip(76, `🧑‍💼 No manager or lead is scheduled on ${day}.`);
+      if (dayShifts.length > 0 && !hasCloser) addTip(70, `🔒 No closer is scheduled on ${day}. Your closing time is ${settings.closingTime}.`);
+    });
+
+    if (metrics.totalCost > 0) {
+      const highestCost = Math.max(...metrics.dayCosts);
+      const highestIdx = metrics.dayCosts.indexOf(highestCost);
+      if (highestCost > 0) addTip(55, `💰 Highest-cost day is ${DAYS[highestIdx]} at ${money(highestCost)}. Review it if margins feel tight.`);
     }
 
-    if (!out.length) out.push("✅ Schedule looks balanced based on current revenue and coverage inputs.");
-    return out.slice(0, 8);
-  }, [state.employees, state.shifts, state.coverage, effectiveDayRevenue, effectiveWeekRevenue, metrics]);
+    const scheduledEmployees = state.employees.filter((emp) => (employeeHours[emp.emp_id] || 0) > 0);
+    if (scheduledEmployees.length >= 2) {
+      const hoursList = scheduledEmployees.map((emp) => employeeHours[emp.emp_id] || 0);
+      const maxHours = Math.max(...hoursList);
+      const minHours = Math.min(...hoursList);
+      if (maxHours - minHours >= 18) addTip(62, `⚖️ Schedule looks unbalanced — one employee has ${maxHours.toFixed(1)}h while another has ${minHours.toFixed(1)}h.`);
+    }
+
+    if (weeklyBudget && metrics.totalCost > weeklyBudget) addTip(97, `💵 Weekly labor is ${money(metrics.totalCost - weeklyBudget)} above your payroll budget.`);
+
+    if (effectiveWeekRevenue && metrics.shiftCount) {
+      const weeklyLaborPct = metrics.totalCost / effectiveWeekRevenue;
+      if (weeklyLaborPct >= dangerLaborPct) addTip(99, `🚨 Weekly labor is ${(weeklyLaborPct * 100).toFixed(1)}% of expected revenue — above your ${settings.dangerLaborPercent}% danger setting.`);
+      else if (weeklyLaborPct >= cautionLaborPct) addTip(80, `⚠️ Weekly labor is ${(weeklyLaborPct * 100).toFixed(1)}% of expected revenue — above your ${settings.cautionLaborPercent}% caution setting.`);
+      else if (weeklyLaborPct < targetLaborPct * 0.65) addTip(50, "✅ Labor percentage is lean. Double-check coverage before cutting more hours.");
+    }
+
+    if (!out.length) addTip(1, "✅ Schedule looks balanced based on your saved labor settings, expected revenue, and coverage inputs.");
+
+    const uniqueTips = [];
+    const seen = new Set();
+    out.sort((a, b) => b.priority - a.priority).forEach((tip) => {
+      if (!seen.has(tip.message)) {
+        seen.add(tip.message);
+        uniqueTips.push(tip.message);
+      }
+    });
+    return uniqueTips.slice(0, 10);
+  }, [state.employees, state.shifts, state.coverage, effectiveDayRevenue, effectiveWeekRevenue, metrics, settings]);
 
   function addEmployee() {
     const name = employeeForm.name.trim();
@@ -324,6 +582,8 @@ export default function ShiftPlanner({ user, supabase }) {
 
     if (!name) return alert("Name is required.");
     if (wage <= 0) return alert("Enter a valid hourly wage.");
+
+    pushHistorySnapshot();
 
     const nextId = state.employees.reduce((m, e) => Math.max(m, e.emp_id), 0) + 1;
 
@@ -351,6 +611,8 @@ export default function ShiftPlanner({ user, supabase }) {
     const emp = state.employees.find((e) => e.emp_id === id);
     if (!emp) return;
     if (!confirm(`Remove ${emp.name} and all their shifts?`)) return;
+
+    pushHistorySnapshot();
 
     setState((prev) => {
       const shifts = { ...prev.shifts };
@@ -405,6 +667,8 @@ export default function ShiftPlanner({ user, supabase }) {
       return;
     }
 
+    pushHistorySnapshot();
+
     setState((prev) => ({
       ...prev,
       shifts: {
@@ -421,9 +685,26 @@ export default function ShiftPlanner({ user, supabase }) {
     setShiftModal(null);
     setStatusMessage("Unsaved changes. Press Save Schedule.");
   }
+  function deleteShiftQuick(empId, dayIdx, event) {
+    event.stopPropagation();
 
+    if (!confirm("Delete this shift?")) return;
+
+    pushHistorySnapshot();
+
+    setState((prev) => {
+      const shifts = { ...prev.shifts };
+      delete shifts[keyFor(empId, dayIdx)];
+      return { ...prev, shifts };
+    });
+
+    setStatusMessage("Unsaved changes. Press Save Schedule.");
+  }
   function deleteShift() {
     if (!shiftModal) return;
+
+    pushHistorySnapshot();
+
     setState((prev) => {
       const shifts = { ...prev.shifts };
       delete shifts[keyFor(shiftModal.empId, shiftModal.dayIdx)];
@@ -452,6 +733,8 @@ export default function ShiftPlanner({ user, supabase }) {
 
     if (!name) return alert("Name is required.");
     if (wage <= 0) return alert("Enter a valid wage.");
+
+    pushHistorySnapshot();
 
     setState((prev) => {
       const employees = prev.employees.map((emp) =>
@@ -483,6 +766,8 @@ export default function ShiftPlanner({ user, supabase }) {
   }
 
   function updateDailyRevenue(index, value) {
+    pushHistorySnapshot();
+
     setState((prev) => {
       const dailyRevenue = [...prev.dailyRevenue];
       dailyRevenue[index] = value;
@@ -492,6 +777,8 @@ export default function ShiftPlanner({ user, supabase }) {
   }
 
   function updateCoverage(index, value) {
+    pushHistorySnapshot();
+
     setState((prev) => {
       const coverage = [...prev.coverage];
       coverage[index] = value;
@@ -501,23 +788,20 @@ export default function ShiftPlanner({ user, supabase }) {
   }
 
   function exportCsv() {
-    const rows = [["Employee", "Role", "Hourly Wage", "Max Hours", ...DAYS, "Total Hours", "Total Cost"]];
+    const rows = [["Employee", "Role", ...DAYS, "Total Hours"]];
 
     state.employees.forEach((emp) => {
       let totalH = 0;
-      let totalC = 0;
 
       const cells = DAYS.map((_, i) => {
         const shift = state.shifts[keyFor(emp.emp_id, i)];
         if (!shift) return "";
         const hrs = shiftHours(shift.start, shift.end);
-        const cost = hrs * emp.wage;
         totalH += hrs;
-        totalC += cost;
-        return `${shift.start}-${shift.end} (${hrs.toFixed(1)}h, ${money(cost)})`;
+        return `${shift.start}-${shift.end} (${hrs.toFixed(1)}h)`;
       });
 
-      rows.push([emp.name, emp.role || "", emp.wage, emp.max_hours || 40, ...cells, totalH.toFixed(1), totalC.toFixed(2)]);
+      rows.push([emp.name, emp.role || "", ...cells, totalH.toFixed(1)]);
     });
 
     const csv = rows.map((r) => r.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
@@ -525,13 +809,322 @@ export default function ShiftPlanner({ user, supabase }) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = (state.currentScheduleName || "shift-planner-schedule").replace(/[^a-z0-9_-]+/gi, "_") + ".csv";
+    a.download = (state.currentScheduleName || "employee-schedule").replace(/[^a-z0-9_-]+/gi, "_") + ".csv";
     a.click();
     URL.revokeObjectURL(url);
   }
 
+  function printEmployeeSchedule() {
+  const printWindow = window.open("", "_blank");
+
+  if (!printWindow) {
+    alert("Popup blocked. Please allow popups to print the schedule.");
+    return;
+  }
+
+  const dates = DAYS.map((day, i) => {
+    const date = new Date(weekMonday(state.weekOffset));
+    date.setDate(date.getDate() + i);
+    return `${day} ${fmtDate(date)}`;
+  });
+
+  const rows = state.employees
+    .map((emp) => {
+      const cells = DAYS.map((_, i) => {
+        const shift = state.shifts[keyFor(emp.emp_id, i)];
+        if (!shift) return "OFF";
+
+        const hrs = shiftHours(shift.start, shift.end);
+
+        return `
+          <div class="shift-time">${shift.start} – ${shift.end}</div>
+          <small>${hrs.toFixed(1)} hrs</small>
+        `;
+      });
+
+      return `
+        <tr>
+          <td>
+            <strong>${emp.name}</strong><br>
+            <small>${emp.role || "Employee"}</small>
+          </td>
+          ${cells.map((cell) => `<td>${cell}</td>`).join("")}
+        </tr>
+      `;
+    })
+    .join("");
+
+  const html = `
+    <!doctype html>
+    <html>
+      <head>
+        <meta charset="utf-8" />
+        <title>Employee Schedule</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            padding: 24px;
+            color: #111;
+            background: #fff;
+          }
+
+          h1 {
+            margin: 0 0 4px;
+            font-size: 24px;
+          }
+
+          .subtitle {
+            margin-bottom: 20px;
+            color: #555;
+            font-size: 14px;
+          }
+
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+          }
+
+          th,
+          td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+          }
+
+          th {
+            background: #f2f2f2;
+          }
+
+          small {
+            color: #555;
+          }
+
+          .shift-time {
+            font-weight: 700;
+          }
+
+          @media print {
+            body {
+              padding: 0;
+            }
+          }
+        </style>
+      </head>
+
+      <body>
+        <h1>${state.currentScheduleName || "Employee Schedule"}</h1>
+        <div class="subtitle">${weekLabel(state.weekOffset)}</div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Employee</th>
+              ${dates.map((date) => `<th>${date}</th>`).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows || `<tr><td colspan="8">No employees scheduled.</td></tr>`}
+          </tbody>
+        </table>
+
+        <script>
+          window.onload = function () {
+            setTimeout(function () {
+              window.print();
+            }, 300);
+          };
+        </script>
+      </body>
+    </html>
+  `;
+
+  printWindow.document.open();
+  printWindow.document.write(html);
+  printWindow.document.close();
+}
+
+  function goToNextWeek() {
+    const copySchedule = confirm(
+      "Do you want to start next week using this week’s schedule?\n\nChoose OK to copy this week, or Cancel to start with a blank week."
+    );
+
+    pushHistorySnapshot();
+
+    setState((prev) => ({
+      ...prev,
+      weekOffset: prev.weekOffset + 1,
+      shifts: copySchedule ? { ...prev.shifts } : {},
+      currentScheduleName: copySchedule
+        ? `${prev.currentScheduleName || "Schedule"} - Copy`
+        : "",
+    }));
+
+    setActiveScheduleId(null);
+    setScheduleName(copySchedule ? `${state.currentScheduleName || "Schedule"} - Copy` : "");
+    setStatusMessage(
+      copySchedule
+        ? "Copied this week into next week. Adjust as needed, then save."
+        : "Started a blank next week."
+    );
+  }
+
+  function addHoursToTime(time, hoursToAdd) {
+  const [h, m] = String(time || "08:00").split(":").map(Number);
+  const start = h * 60 + m;
+  const end = start + Math.round(hoursToAdd * 60);
+  const eh = Math.floor(end / 60) % 24;
+  const em = end % 60;
+  return `${String(eh).padStart(2, "0")}:${String(em).padStart(2, "0")}`;
+}
+
+function subtractHoursFromTime(time, hoursToSubtract) {
+  const [h, m] = String(time || "21:00").split(":").map(Number);
+  const end = h * 60 + m;
+  let start = end - Math.round(hoursToSubtract * 60);
+  if (start < 0) start += 1440;
+  const sh = Math.floor(start / 60) % 24;
+  const sm = start % 60;
+  return `${String(sh).padStart(2, "0")}:${String(sm).padStart(2, "0")}`;
+}
+
+function buildSuggestedSchedule() {
+  if (!state.employees.length) {
+    alert("Add employees before building a suggested schedule.");
+    return;
+  }
+
+  pushHistorySnapshot();
+
+  const targetLaborPct = (num(settings.targetLaborPercent) || DEFAULT_SETTINGS.targetLaborPercent) / 100;
+  const minStaff = num(settings.minimumStaffPerShift) || DEFAULT_SETTINGS.minimumStaffPerShift;
+  const overtimeLimit = num(settings.overtimeThreshold) || DEFAULT_SETTINGS.overtimeThreshold;
+  const openingTime = settings.openingTime || DEFAULT_SETTINGS.openingTime;
+  const closingTime = settings.closingTime || DEFAULT_SETTINGS.closingTime;
+  const busyDays = Array.isArray(settings.busyDays) ? settings.busyDays : [];
+
+  const sortedEmployees = [...state.employees].sort((a, b) => num(a.wage) - num(b.wage));
+  const nextShifts = {};
+  const assignedHours = {};
+
+  sortedEmployees.forEach((emp) => {
+    assignedHours[emp.emp_id] = 0;
+  });
+
+  const dayOrder = DAYS.map((day, dayIdx) => ({
+    day,
+    dayIdx,
+    revenue: effectiveDayRevenue[dayIdx] || 0,
+    busy: busyDays.includes(dayIdx),
+  })).sort((a, b) => {
+    if (a.busy !== b.busy) return a.busy ? -1 : 1;
+    return b.revenue - a.revenue;
+  });
+
+  dayOrder.forEach(({ dayIdx, revenue, busy }) => {
+    const availableEmployees = sortedEmployees.filter(
+      (emp) => !(emp.unavailable_days || []).includes(dayIdx)
+    );
+
+    if (!availableEmployees.length) return;
+
+    const avgWage =
+      availableEmployees.reduce((sum, emp) => sum + num(emp.wage), 0) /
+      Math.max(availableEmployees.length, 1);
+
+    const laborBudget = revenue > 0 ? revenue * targetLaborPct : 0;
+
+    let suggestedStaff = minStaff;
+
+    if (revenue > 0 && avgWage > 0) {
+      suggestedStaff = Math.max(
+        minStaff,
+        Math.floor(laborBudget / Math.max(avgWage * 8, 1))
+      );
+    }
+
+    if (busy) suggestedStaff += 1;
+
+    suggestedStaff = Math.min(suggestedStaff, availableEmployees.length);
+
+    const candidates = availableEmployees
+      .filter((emp) => {
+        const maxHours = emp.max_hours || overtimeLimit;
+        return (assignedHours[emp.emp_id] || 0) < maxHours;
+      })
+      .sort((a, b) => {
+        const aHours = assignedHours[a.emp_id] || 0;
+        const bHours = assignedHours[b.emp_id] || 0;
+        return aHours - bHours || num(a.wage) - num(b.wage);
+      })
+      .slice(0, suggestedStaff);
+
+    candidates.forEach((emp, index) => {
+      const maxHours = emp.max_hours || overtimeLimit;
+      const remaining = Math.max(maxHours - (assignedHours[emp.emp_id] || 0), 0);
+      const plannedHours = Math.min(8, remaining);
+
+      if (plannedHours <= 0) return;
+
+      const shouldClose = busy && index === candidates.length - 1;
+
+      const start = shouldClose
+        ? subtractHoursFromTime(closingTime, plannedHours)
+        : openingTime;
+
+      const end = shouldClose
+        ? closingTime
+        : addHoursToTime(openingTime, plannedHours);
+
+      nextShifts[keyFor(emp.emp_id, dayIdx)] = {
+        emp_id: emp.emp_id,
+        day_idx: dayIdx,
+        start,
+        end,
+      };
+
+      assignedHours[emp.emp_id] += plannedHours;
+    });
+  });
+
+  setState((prev) => ({
+    ...prev,
+    shifts: nextShifts,
+  }));
+
+  setActiveScheduleId(null);
+  setStatusMessage(
+    `Built a suggested schedule using busy days first, your ${settings.targetLaborPercent}% labor target, ${settings.minimumStaffPerShift} minimum staff setting, availability, and max hours. Review and adjust before saving.`
+  );
+}
+    function pushHistorySnapshot() {
+    setHistoryStack((prev) => [
+      {
+        state: JSON.parse(JSON.stringify(state)),
+        timestamp: Date.now(),
+      },
+      ...prev,
+    ].slice(0, 25));
+  }
+
+  function undoLastAction() {
+    if (!historyStack.length) {
+      alert("Nothing to undo.");
+      return;
+    }
+
+    const [latest, ...rest] = historyStack;
+
+    setState(latest.state);
+    setHistoryStack(rest);
+    setStatusMessage("Undid last action.");
+  }
   function clearWeek() {
     if (!confirm("Clear all shifts for this week? Employees and inputs stay.")) return;
+
+    pushHistorySnapshot();
+
     setState((prev) => ({ ...prev, shifts: {} }));
     setStatusMessage("Unsaved changes. Press Save Schedule.");
   }
@@ -565,30 +1158,107 @@ export default function ShiftPlanner({ user, supabase }) {
               {statusMessage && <div className="portal-status">{statusMessage}</div>}
             </div>
 
-            <div className="planner-actions">
-              <button className="small-btn primary" type="button" onClick={() => saveCurrentSchedule()} disabled={saving}>
-                {saving ? "Saving..." : "💾 Save Schedule"}
-              </button>
-              <button
-                className="small-btn"
-                type="button"
-                onClick={() => {
-                  setScheduleName(state.currentScheduleName || "");
-                  setScheduleModalOpen(true);
-                }}
-              >
-                📅 Schedule Manager
-              </button>
-              <button className="small-btn" type="button" onClick={createNewSchedule}>
-                New Schedule
-              </button>
-              <button className="small-btn" type="button" onClick={exportCsv}>
-                Export CSV
-              </button>
-              <button className="small-btn danger" type="button" onClick={clearWeek}>
-                Clear Week
-              </button>
-            </div>
+          <div className="planner-actions-clean">
+
+                {/* PRIMARY */}
+                <div className="planner-action-section">
+                  <div className="planner-section-label">BUILD</div>
+
+                  <div className="planner-action-row">
+                    <button
+                      className="small-btn primary big-action-btn"
+                      type="button"
+                      onClick={() => saveCurrentSchedule()}
+                      disabled={saving}
+                    >
+                      {saving ? "Saving..." : "💾 Save Schedule"}
+                    </button>
+
+                    <button
+                      className="small-btn primary big-action-btn"
+                      type="button"
+                      onClick={buildSuggestedSchedule}
+                    >
+                      Build Suggested
+                    </button>
+
+                    <button
+                      className="small-btn"
+                      type="button"
+                      onClick={undoLastAction}
+                      disabled={!historyStack.length}
+                    >
+                      ↶ Undo
+                    </button>
+                  </div>
+                </div>
+
+                {/* MANAGEMENT */}
+                <div className="planner-action-section">
+                  <div className="planner-section-label">MANAGE</div>
+
+                  <div className="planner-action-row">
+                    <button
+                      className="small-btn"
+                      type="button"
+                      onClick={() => {
+                        setScheduleName(state.currentScheduleName || "");
+                        setScheduleModalOpen(true);
+                      }}
+                    >
+                      📅 Manager
+                    </button>
+
+                    <button
+                      className="small-btn"
+                      type="button"
+                      onClick={createNewSchedule}
+                    >
+                      New
+                    </button>
+
+                    <button
+                      className="small-btn"
+                      type="button"
+                      onClick={openSettingsModal}
+                    >
+                      ⚙ Settings
+                    </button>
+                  </div>
+                </div>
+
+                {/* UTILITIES */}
+                <div className="planner-action-section">
+                  <div className="planner-section-label">TOOLS</div>
+
+                  <div className="planner-action-row">
+                    <button
+                      className="small-btn"
+                      type="button"
+                      onClick={printEmployeeSchedule}
+                    >
+                      Print
+                    </button>
+
+                    <button
+                      className="small-btn"
+                      type="button"
+                      onClick={exportCsv}
+                    >
+                      CSV
+                    </button>
+
+                    <button
+                      className="small-btn danger"
+                      type="button"
+                      onClick={clearWeek}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+
+              </div>
           </div>
 
           <div className="planner-app">
@@ -678,8 +1348,9 @@ export default function ShiftPlanner({ user, supabase }) {
                 )}
               </div>
 
-              <div className="mini-label">Projected Revenue</div>
+              <div className="mini-label">Expected Revenue</div>
               <div className="planner-card">
+                <p className="subtle-text">Use last week’s revenue, recent sales, or your best estimate to forecast the upcoming schedule.</p>
                 <label className="checkbox-label">
                   <input
                     checked={state.revenueMode === "weekly"}
@@ -689,7 +1360,7 @@ export default function ShiftPlanner({ user, supabase }) {
                     }}
                     type="checkbox"
                   />
-                  Use weekly revenue only
+                  Use expected weekly revenue only
                 </label>
 
                 <div className="revenue-grid">
@@ -749,7 +1420,7 @@ export default function ShiftPlanner({ user, supabase }) {
                 <div className="labor-pct">
                   {effectiveWeekRevenue > 0 ? `${((metrics.totalCost / effectiveWeekRevenue) * 100).toFixed(1)}%` : "—"}
                 </div>
-                <div className="labor-caption">LABOR % OF WEEKLY REVENUE</div>
+                <div className="labor-caption">LABOR % OF EXPECTED WEEKLY REVENUE</div>
               </div>
             </aside>
 
@@ -760,7 +1431,7 @@ export default function ShiftPlanner({ user, supabase }) {
                     ‹
                   </button>
                   <div className="week-title">{weekLabel(state.weekOffset)}</div>
-                  <button className="small-btn" type="button" onClick={() => setState((p) => ({ ...p, weekOffset: p.weekOffset + 1 }))}>
+                  <button className="small-btn" type="button" onClick={goToNextWeek}>
                     ›
                   </button>
                   <button className="small-btn" type="button" onClick={() => setState((p) => ({ ...p, weekOffset: 0 }))}>
@@ -778,7 +1449,7 @@ export default function ShiftPlanner({ user, supabase }) {
                 <div className="stat-card"><span>Avg Cost / Day</span><strong>{money(metrics.avg)}</strong></div>
                 <div className="stat-card"><span>Highest Day</span><strong>{metrics.totalCost ? `${DAYS[metrics.peakIdx]} ${money(metrics.dayCosts[metrics.peakIdx])}` : "—"}</strong></div>
                 <div className="stat-card"><span>Shifts Scheduled</span><strong>{metrics.shiftCount}</strong></div>
-                <div className="stat-card"><span>Over Budget Days</span><strong>{metrics.over}</strong></div>
+                <div className="stat-card"><span>Over Danger Days</span><strong>{metrics.over}</strong></div>
               </div>
 
               <div className="grid-wrap">
@@ -789,7 +1460,9 @@ export default function ShiftPlanner({ user, supabase }) {
                     date.setDate(date.getDate() + i);
                     return (
                       <div className="grid-head" key={day}>
-                        {day}<br /><span>{fmtDate(date)}</span>
+                        <div>{day}</div>
+                        <span>{fmtDate(date)}</span>
+                        <strong className="grid-day-cost">{money(metrics.dayCosts[i])}</strong>
                       </div>
                     );
                   })}
@@ -820,16 +1493,27 @@ export default function ShiftPlanner({ user, supabase }) {
                               {unavailable ? (
                                 <div className="unavailable">Unavailable</div>
                               ) : shift ? (
-                                <button
-                                  className="shift-card"
-                                  type="button"
-                                  style={{ color: color.fg, background: color.bg }}
-                                  onClick={() => openShift(emp.emp_id, i)}
-                                >
-                                  <div className="shift-time">{shift.start} – {shift.end}</div>
-                                  <div className="shift-hours">{hrs.toFixed(1)}h</div>
-                                  <div className="shift-cost">{money(cost)}</div>
-                                </button>
+                                <div
+                                    className="shift-card"
+                                    role="button"
+                                    tabIndex={0}
+                                    style={{ color: color.fg, background: color.bg }}
+                                    onClick={() => openShift(emp.emp_id, i)}
+                                    onKeyDown={(e) => e.key === "Enter" && openShift(emp.emp_id, i)}
+                                  >
+                                    <button
+                                      className="shift-delete-x"
+                                      type="button"
+                                      title="Delete shift"
+                                      onClick={(e) => deleteShiftQuick(emp.emp_id, i, e)}
+                                    >
+                                      ×
+                                    </button>
+
+                                    <div className="shift-time">{shift.start} – {shift.end}</div>
+                                    <div className="shift-hours">{hrs.toFixed(1)}h</div>
+                                    <div className="shift-cost">{money(cost)}</div>
+                                  </div>
                               ) : (
                                 <button className="shift-empty" type="button" onClick={() => openShift(emp.emp_id, i)}>
                                   +
@@ -928,6 +1612,61 @@ export default function ShiftPlanner({ user, supabase }) {
               <button className="small-btn" type="button" onClick={() => setEmployeeModal(null)}>Cancel</button>
               <button className="small-btn primary" type="button" onClick={saveEmployeeEdit}>Save Employee</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {settingsModalOpen && (
+        <div className="modal-backdrop open" onClick={() => !settingsIntroMode && setSettingsModalOpen(false)}>
+          <div className="modal settings-modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+            <div className="settings-modal-head">
+              <div>
+                <div className="demo-eyebrow">{settingsIntroMode ? "First-Time Setup" : "Shift Planner Settings"}</div>
+                <h3>{settingsIntroMode ? "Welcome to Shift Planner" : "Settings"}</h3>
+                <p>{settingsIntroMode ? "Let’s personalize your labor targets and scheduling preferences." : "Adjust labor targets, overtime rules, coverage rules, business hours, and scheduling preferences."}</p>
+              </div>
+              {!settingsIntroMode && <button className="icon-btn" type="button" onClick={() => setSettingsModalOpen(false)}>×</button>}
+            </div>
+
+            <form onSubmit={savePlannerSettings}>
+              <div className="settings-section-title">Labor targets</div>
+              <div className="settings-grid">
+                <label><span>Target Labor %</span><input className="field" type="number" min="1" max="100" step="0.1" value={settingsForm.targetLaborPercent} onChange={(e) => setSettingsForm((p) => ({ ...p, targetLaborPercent: e.target.value }))} /></label>
+                <label><span>Caution at %</span><input className="field" type="number" min="1" max="100" step="0.1" value={settingsForm.cautionLaborPercent} onChange={(e) => setSettingsForm((p) => ({ ...p, cautionLaborPercent: e.target.value }))} /></label>
+                <label><span>Danger at %</span><input className="field" type="number" min="1" max="100" step="0.1" value={settingsForm.dangerLaborPercent} onChange={(e) => setSettingsForm((p) => ({ ...p, dangerLaborPercent: e.target.value }))} /></label>
+                <label><span>Weekly Payroll Budget</span><input className="field" type="number" min="0" step="0.01" placeholder="Optional" value={settingsForm.weeklyBudget || ""} onChange={(e) => setSettingsForm((p) => ({ ...p, weeklyBudget: e.target.value }))} /></label>
+              </div>
+              <p className="settings-hint">Recommended: restaurants 25–35%, retail 15–25%, service businesses 30–45%.</p>
+
+              <div className="settings-section-title">Overtime and coverage rules</div>
+              <div className="settings-grid">
+                <label><span>Overtime Threshold</span><input className="field" type="number" min="1" step="0.5" value={settingsForm.overtimeThreshold} onChange={(e) => setSettingsForm((p) => ({ ...p, overtimeThreshold: e.target.value }))} /></label>
+                <label><span>Minimum Staff Per Shift</span><input className="field" type="number" min="1" step="1" value={settingsForm.minimumStaffPerShift} onChange={(e) => setSettingsForm((p) => ({ ...p, minimumStaffPerShift: e.target.value }))} /></label>
+                <label><span>Max Consecutive Days</span><input className="field" type="number" min="1" max="14" step="1" value={settingsForm.maxConsecutiveDays} onChange={(e) => setSettingsForm((p) => ({ ...p, maxConsecutiveDays: e.target.value }))} /></label>
+                <label><span>Business Type</span><select className="field" value={settingsForm.businessType} onChange={(e) => setSettingsForm((p) => ({ ...p, businessType: e.target.value }))}>{BUSINESS_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}</select></label>
+              </div>
+
+              <div className="settings-section-title">Business hours</div>
+              <div className="settings-grid">
+                <label><span>Opening Time</span><input className="field" type="time" value={settingsForm.openingTime} onChange={(e) => setSettingsForm((p) => ({ ...p, openingTime: e.target.value }))} /></label>
+                <label><span>Closing Time</span><input className="field" type="time" value={settingsForm.closingTime} onChange={(e) => setSettingsForm((p) => ({ ...p, closingTime: e.target.value }))} /></label>
+                <label><span>Labor Strategy</span><select className="field" value={settingsForm.preferredStrategy} onChange={(e) => setSettingsForm((p) => ({ ...p, preferredStrategy: e.target.value }))}>{LABOR_STRATEGIES.map((strategy) => <option key={strategy} value={strategy}>{strategy}</option>)}</select></label>
+              </div>
+
+              <div className="settings-section-title">Busy days</div>
+              <div className="settings-day-grid">
+                {DAYS.map((day, i) => (
+                  <button type="button" className={`check-day ${settingsForm.busyDays?.includes(i) ? "active" : ""}`} key={`busy-${day}`} onClick={() => setSettingsForm((p) => ({ ...p, busyDays: p.busyDays?.includes(i) ? p.busyDays.filter((d) => d !== i) : [...(p.busyDays || []), i] }))}>{day}</button>
+                ))}
+              </div>
+
+              <div className="settings-summary-card"><strong>These settings power your tips and suggested schedules.</strong><span>Warnings now adjust to your labor %, overtime threshold, minimum staff, busy days, and business hours.</span></div>
+
+              <div className="button-row right-buttons">
+                {!settingsIntroMode && <button className="small-btn" type="button" onClick={() => setSettingsModalOpen(false)}>Cancel</button>}
+                <button className="small-btn primary" type="submit">Save Settings</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
