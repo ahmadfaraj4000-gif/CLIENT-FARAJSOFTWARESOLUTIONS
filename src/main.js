@@ -38,7 +38,7 @@ const products = [
     price: '$19/mo',
     stripeLink:
       import.meta.env.VITE_STRIPE_SHIFT_PLANNER_LINK ||
-      'https://buy.stripe.com/3cIdRb6MO8Jm3cTbWn5Ne0b',
+      'https://buy.stripe.com/28E4gBfjk5xa7t9gcD5Ne0e',
     appLink: '/?app=shift-planner'
   },
   {
