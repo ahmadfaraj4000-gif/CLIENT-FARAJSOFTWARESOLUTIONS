@@ -1149,3 +1149,18 @@
     padding: 11px;
   }
 }
+.tips-toggle-btn {
+  margin-top: 10px;
+  border: 1px solid rgba(34,211,197,.24);
+  background: rgba(34,211,197,.08);
+  color: var(--teal);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.tips-toggle-btn:hover {
+  background: rgba(34,211,197,.14);
+}

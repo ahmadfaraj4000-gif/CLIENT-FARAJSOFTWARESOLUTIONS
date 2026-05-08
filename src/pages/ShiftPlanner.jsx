@@ -180,6 +180,7 @@ export default function ShiftPlanner({ user, supabase }) {
   const [settingsIntroMode, setSettingsIntroMode] = useState(false);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [historyStack, setHistoryStack] = useState([]);
+  const [showAllTips, setShowAllTips] = useState(false);
 
   const [employeeForm, setEmployeeForm] = useState({
     name: "",
@@ -467,15 +468,12 @@ export default function ShiftPlanner({ user, supabase }) {
     const busyDays = Array.isArray(settings.busyDays) ? settings.busyDays : [];
 
     if (!state.employees.length) {
-      return {
-        bestMove: {
-          type: "info",
-          title: "Add employees to unlock labor guidance",
-          action: "Enter employee names, hourly wages, max hours, and availability. Then Shift Planner can flag labor risk, overtime, and coverage gaps.",
-        },
-        items: [],
-        hiddenCount: 0,
-      };
+        return {
+          bestMove,
+          items: uniqueTips.slice(1, 4),
+          hiddenItems: uniqueTips.slice(4),
+          hiddenCount: Math.max(uniqueTips.length - 4, 0),
+        };
     }
 
     const employeeHours = {};
@@ -1750,7 +1748,17 @@ function buildSuggestedSchedule() {
                     <div className="suggestions-title">💡 Smart labor suggestions</div>
                     <div className="suggestions-subtitle">Showing the best move plus the top priority fixes.</div>
                   </div>
-                  {tips.hiddenCount > 0 && <span className="suggestions-count">+{tips.hiddenCount} more</span>}
+                  {tips.hiddenCount > 0 && (
+                  <button
+                    className="tips-toggle-btn"
+                    type="button"
+                    onClick={() => setShowAllTips((prev) => !prev)}
+                  >
+                    {showAllTips
+                      ? "Show fewer warnings"
+                      : `Show ${tips.hiddenCount} more warning${tips.hiddenCount === 1 ? "" : "s"}`}
+                  </button>
+                )}
                 </div>
 
                 <div className={`best-move insight-${tips.bestMove.type || "info"}`}>
@@ -1759,16 +1767,20 @@ function buildSuggestedSchedule() {
                   <p>{tips.bestMove.action}</p>
                 </div>
 
-                {tips.items.length > 0 && (
-                  <div className="insight-list">
-                    {tips.items.map((tip, index) => (
-                      <div className={`insight-card insight-${tip.type || "info"}`} key={`${tip.title}-${index}`}>
-                        <strong>{tip.title}</strong>
-                        <p>{tip.action}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <div className="insight-list">
+                  {(showAllTips
+                    ? [...tips.items, ...(tips.hiddenItems || [])]
+                    : tips.items
+                  ).map((tip, index) => (
+                    <div
+                      className={`insight-card insight-${tip.type || "info"}`}
+                      key={`${tip.title}-${index}`}
+                    >
+                      <strong>{tip.title}</strong>
+                      <p>{tip.action}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </section>
           </div>
