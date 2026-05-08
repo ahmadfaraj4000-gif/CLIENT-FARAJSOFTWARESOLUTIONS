@@ -468,12 +468,16 @@ export default function ShiftPlanner({ user, supabase }) {
     const busyDays = Array.isArray(settings.busyDays) ? settings.busyDays : [];
 
     if (!state.employees.length) {
-        return {
-          bestMove,
-          items: uniqueTips.slice(1, 4),
-          hiddenItems: uniqueTips.slice(4),
-          hiddenCount: Math.max(uniqueTips.length - 4, 0),
-        };
+      return {
+        bestMove: {
+          type: "info",
+          title: "Add employees to unlock labor guidance",
+          action: "Enter employee names, hourly wages, max hours, and availability. Then Shift Planner can flag labor risk, overtime, and coverage gaps.",
+        },
+        items: [],
+        hiddenItems: [],
+        hiddenCount: 0,
+      };
     }
 
     const employeeHours = {};
@@ -784,6 +788,7 @@ export default function ShiftPlanner({ user, supabase }) {
     return {
       bestMove,
       items: uniqueTips.slice(1, 4),
+      hiddenItems: uniqueTips.slice(4),
       hiddenCount: Math.max(uniqueTips.length - 4, 0),
     };
   }, [state.employees, state.shifts, state.coverage, effectiveDayRevenue, effectiveWeekRevenue, metrics, settings]);
