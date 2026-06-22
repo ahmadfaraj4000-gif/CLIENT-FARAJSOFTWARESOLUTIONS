@@ -3,6 +3,7 @@ import './styles.css';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import ShiftPlanner from './pages/ShiftPlanner.jsx';
+import PricingAssistant from './pages/PricingAssistant.jsx';
 import './pages/ShiftPlanner.css';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -18,16 +19,17 @@ const supabase = hasSupabaseConfig ? createClient(supabaseUrl, supabaseAnonKey) 
 
 const products = [
   {
-    id: 'pricing-assistant',
-    name: 'Pricing Assistant',
-    eyebrow: 'Coming Soon',
+    id: 'pricing-assistant-pro',
+    name: 'Pricing Assistant Pro',
+    eyebrow: 'Advanced pricing',
     description:
-      'Price menu items using food cost, labor, overhead, waste, packaging, and profit targets.',
-    price: '$14.99/mo',
+      'Adds delivery and card fee modeling, competitor positioning, saved cost structures, menus, scenarios, and CSV export.',
+    price: '$19.99/mo',
+    subscriptionKeys: ['pricing_assistant_pro'],
     stripeLink:
-      import.meta.env.VITE_STRIPE_PRICING_ASSISTANT_LINK ||
-      'https://buy.stripe.com/placeholder-pricing-assistant',
-    appLink: '/pricing-assistant-app.html'
+      import.meta.env.VITE_STRIPE_PRICING_ASSISTANT_PRO_LINK ||
+      'https://buy.stripe.com/8x200l0oqcZC4gXd0r5Ne0k',
+    appLink: '/?app=pricing-assistant'
   },
   {
     id: 'shift-planner',
@@ -43,10 +45,10 @@ const products = [
   },
   {
     id: 'spa-cost-estimator',
-    name: 'Spa Cost Estimator',
+    name: 'Service Cost Estimator',
     eyebrow: 'Coming soon',
     description:
-      'Estimate cost per client by factoring products, rent, supplies, equipment, time, and operating expenses.',
+      'Find your true cost per client visit by factoring supplies, labor time, rent, equipment, and operating expenses.',
     price: '$14.99/mo',
     stripeLink:
       import.meta.env.VITE_STRIPE_SPA_CALCULATOR_LINK ||
@@ -61,6 +63,8 @@ const params = new URLSearchParams(window.location.search);
 
 if (params.get('app') === 'shift-planner') {
   renderShiftPlannerRoute();
+} else if (params.get('app') === 'pricing-assistant') {
+  renderPricingAssistantRoute();
 } else {
   init();
 }
@@ -80,13 +84,15 @@ function html(strings, ...values) {
 
 function productToSubscriptionKey(productId) {
   if (productId === 'shift-planner') return 'shift_planner';
-  if (productId === 'pricing-assistant') return 'pricing_assistant';
+  if (productId === 'pricing-assistant-pro') return 'pricing_assistant_pro';
   if (productId === 'spa-cost-estimator') return 'spa_cost_estimator';
   return productId.replaceAll('-', '_');
 }
 
 function isSubscribed(productId) {
-  return Boolean(state.subscriptions[productToSubscriptionKey(productId)]);
+  const product = products.find((item) => item.id === productId);
+  const keys = product?.subscriptionKeys || [productToSubscriptionKey(productId)];
+  return keys.some((key) => Boolean(state.subscriptions[key]));
 }
 
 async function loadSubscriptions() {
@@ -99,7 +105,7 @@ async function loadSubscriptions() {
 
   const { data, error } = await supabase
     .from('subscriptions')
-    .select('product, status, current_period_end')
+    .select('product, status, current_period_end, expires_at')
     .eq('user_id', state.user.id)
     .in('status', ['active', 'trialing', 'paid']);
 
@@ -115,8 +121,8 @@ async function loadSubscriptions() {
 
   (data || []).forEach((row) => {
     const notExpired =
-      !row.current_period_end ||
-      new Date(row.current_period_end).getTime() > Date.now();
+      (!row.current_period_end || new Date(row.current_period_end).getTime() > Date.now()) &&
+      (!row.expires_at || new Date(row.expires_at).getTime() > Date.now());
 
     if (notExpired) {
       activeMap[row.product] = true;
@@ -402,7 +408,7 @@ async function renderShiftPlannerRoute() {
 
   const { data: sub, error } = await supabase
     .from('subscriptions')
-    .select('product, status, current_period_end')
+    .select('product, status, current_period_end, expires_at')
     .eq('user_id', user.id)
     .eq('product', 'shift_planner')
     .in('status', ['active', 'trialing', 'paid'])
@@ -415,8 +421,8 @@ async function renderShiftPlannerRoute() {
   }
 
   const notExpired =
-    !sub?.current_period_end ||
-    new Date(sub.current_period_end).getTime() > Date.now();
+    (!sub?.current_period_end || new Date(sub.current_period_end).getTime() > Date.now()) &&
+    (!sub?.expires_at || new Date(sub.expires_at).getTime() > Date.now());
 
   if (!sub || !notExpired) {
     window.location.href = '/';
@@ -424,4 +430,45 @@ async function renderShiftPlannerRoute() {
   }
 
   createRoot(app).render(React.createElement(ShiftPlanner, { user, supabase }));
+}
+
+async function renderPricingAssistantRoute() {
+  if (!hasSupabaseConfig || !supabase) {
+    app.innerHTML = `<main class="portal-shell"><section class="auth-card"><p>Supabase is not configured.</p></section></main>`;
+    return;
+  }
+
+  const { data } = await supabase.auth.getSession();
+  const user = data.session?.user || null;
+
+  if (!user) {
+    window.location.href = '/';
+    return;
+  }
+
+  const { data: subs, error } = await supabase
+    .from('subscriptions')
+    .select('product, status, current_period_end, expires_at')
+    .eq('user_id', user.id)
+    .eq('product', 'pricing_assistant_pro')
+    .in('status', ['active', 'trialing', 'paid']);
+
+  if (error) {
+    app.innerHTML = `<main class="portal-shell"><section class="auth-card"><p>${error.message}</p></section></main>`;
+    return;
+  }
+
+  const activeSubs = (subs || []).filter((sub) => {
+    return (
+      (!sub.current_period_end || new Date(sub.current_period_end).getTime() > Date.now()) &&
+      (!sub.expires_at || new Date(sub.expires_at).getTime() > Date.now())
+    );
+  });
+
+  if (!activeSubs.length) {
+    window.location.href = '/';
+    return;
+  }
+
+  createRoot(app).render(React.createElement(PricingAssistant, { user, supabase, tier: 'pro' }));
 }
