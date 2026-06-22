@@ -329,6 +329,32 @@ h2 {
   background: rgba(34,211,197,0.16);
 }
 
+.trial-countdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 18px 0 2px;
+  padding: 11px 12px;
+  border: 1px solid rgba(255, 193, 7, 0.28);
+  border-radius: 12px;
+  background: rgba(255, 193, 7, 0.08);
+  color: rgba(255,255,255,0.92);
+}
+
+.trial-countdown span {
+  color: rgba(185,199,214,0.88);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.trial-countdown strong {
+  color: #ffd166;
+  font-size: 14px;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
 .btn.locked {
   cursor: not-allowed;
   color: rgba(185,199,214,0.72);

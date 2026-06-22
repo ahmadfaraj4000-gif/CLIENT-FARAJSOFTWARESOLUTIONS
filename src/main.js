@@ -62,6 +62,7 @@ const products = [
 const app = document.querySelector('#app');
 
 const params = new URLSearchParams(window.location.search);
+let countdownTimer = null;
 
 if (params.get('app') === 'shift-planner') {
   renderShiftPlannerRoute();
@@ -97,6 +98,51 @@ function isSubscribed(productId) {
   return keys.some((key) => Boolean(state.subscriptions[key]));
 }
 
+function getProductSubscription(productId) {
+  const product = products.find((item) => item.id === productId);
+  const keys = product?.subscriptionKeys || [productToSubscriptionKey(productId)];
+  return keys.map((key) => state.subscriptions[key]).find(Boolean) || null;
+}
+
+function formatTrialCountdown(expiresAt) {
+  const end = new Date(expiresAt).getTime();
+  const remainingMs = end - Date.now();
+
+  if (!Number.isFinite(end) || remainingMs <= 0) {
+    return 'Trial ending now';
+  }
+
+  const totalMinutes = Math.ceil(remainingMs / 60000);
+  const days = Math.floor(totalMinutes / 1440);
+  const hours = Math.floor((totalMinutes % 1440) / 60);
+  const minutes = totalMinutes % 60;
+
+  if (days > 0) {
+    return `${days}d ${hours}h left`;
+  }
+
+  if (hours > 0) {
+    return `${hours}h ${minutes}m left`;
+  }
+
+  return `${minutes}m left`;
+}
+
+function updateCountdowns() {
+  document.querySelectorAll('[data-trial-expires-at]').forEach((item) => {
+    item.textContent = formatTrialCountdown(item.dataset.trialExpiresAt);
+  });
+}
+
+function startCountdownTimer() {
+  if (countdownTimer) {
+    window.clearInterval(countdownTimer);
+  }
+
+  updateCountdowns();
+  countdownTimer = window.setInterval(updateCountdowns, 60000);
+}
+
 async function loadSubscriptions() {
   if (!hasSupabaseConfig || !supabase || !state.user) {
     state.subscriptions = {};
@@ -127,7 +173,7 @@ async function loadSubscriptions() {
       (!row.expires_at || new Date(row.expires_at).getTime() > Date.now());
 
     if (notExpired) {
-      activeMap[row.product] = true;
+      activeMap[row.product] = row;
     }
   });
 
@@ -189,6 +235,7 @@ function render() {
   `;
 
   bindEvents();
+  startCountdownTimer();
 }
 
 function authView() {
@@ -271,6 +318,8 @@ function portalView() {
 
 function productCard(product) {
   const active = isSubscribed(product.id);
+  const subscription = getProductSubscription(product.id);
+  const trialEndsAt = subscription?.status === 'trialing' ? subscription.expires_at : null;
 
   return `
     <article class="software-card">
@@ -281,6 +330,15 @@ function productCard(product) {
 
       <h2>${product.name}</h2>
       <p>${product.description}</p>
+
+      ${
+        trialEndsAt
+          ? `<div class="trial-countdown" aria-label="${product.name} trial countdown">
+              <span>Trial ends in</span>
+              <strong data-trial-expires-at="${trialEndsAt}">${formatTrialCountdown(trialEndsAt)}</strong>
+            </div>`
+          : ''
+      }
 
       <div class="card-actions">
         ${
@@ -354,9 +412,19 @@ async function startTrial(productId) {
   state.message = `Starting ${product?.name || 'trial'}...`;
   render();
 
-  const { data, error } = await supabase.rpc('start_product_trial', {
-    requested_product: subscriptionProduct,
-  });
+  let response;
+
+  try {
+    response = await supabase.rpc('start_product_trial', {
+      requested_product: subscriptionProduct,
+    });
+  } catch (err) {
+    state.message = err?.message || 'Could not start the trial. Please try again.';
+    render();
+    return;
+  }
+
+  const { data, error } = response;
 
   if (error) {
     state.message = error.message;
@@ -365,6 +433,12 @@ async function startTrial(productId) {
   }
 
   await loadSubscriptions();
+  state.subscriptions[subscriptionProduct] = {
+    product: subscriptionProduct,
+    status: 'trialing',
+    expires_at: data?.[0]?.expires_at || null
+  };
+
   const expiresAt = data?.[0]?.expires_at ? new Date(data[0].expires_at).toLocaleDateString() : '7 days';
   state.message = `${product?.name || 'Trial'} is active until ${expiresAt}.`;
   render();
