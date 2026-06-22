@@ -177,6 +177,16 @@
   flex-wrap: wrap;
 }
 
+.compact-actions {
+  justify-content: flex-end;
+}
+
+.compact-actions button {
+  min-height: 34px;
+  padding: 7px 10px;
+  font-size: 13px;
+}
+
 .pricing-app button {
   min-height: 38px;
   padding: 9px 12px;
@@ -459,6 +469,22 @@
   background: rgba(239, 119, 119, 0.16) !important;
 }
 
+.integration-note {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(243, 179, 77, 0.22);
+  background: rgba(243, 179, 77, 0.08);
+  color: rgba(238, 245, 251, 0.84);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.integration-note.active {
+  border-color: rgba(34, 211, 197, 0.24);
+  background: rgba(34, 211, 197, 0.08);
+  color: rgba(238, 245, 251, 0.92);
+}
+
 .toggle-line {
   display: flex;
   align-items: center;
@@ -669,11 +695,23 @@
   font-size: 12px;
 }
 
-.menu-items button {
+.menu-item-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.menu-item-row > button:first-child {
   display: flex;
   align-items: center;
   justify-content: space-between;
   text-align: left;
+  min-width: 0;
+}
+
+.menu-item-row span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .pricing-modal-backdrop {
@@ -822,6 +860,10 @@
 
   .mini-row input {
     width: 100%;
+  }
+
+  .menu-item-row {
+    grid-template-columns: 1fr;
   }
 
   .modal-choice-grid,

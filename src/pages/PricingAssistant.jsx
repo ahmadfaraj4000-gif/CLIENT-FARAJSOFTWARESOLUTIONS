@@ -459,6 +459,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
   const [activeTab, setActiveTab] = useState("setup");
   const [templateSearch, setTemplateSearch] = useState("");
   const [modal, setModal] = useState(null);
+  const [shiftPlannerAccess, setShiftPlannerAccess] = useState({ loading: true, active: false });
   const menusRef = useRef([]);
   const lastAutoCostSignatureRef = useRef("");
   const lastAutoMenuSignatureRef = useRef("");
@@ -477,10 +478,12 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
   useEffect(() => {
     if (!user?.id || !supabase) {
       setSavedDataLoaded(true);
+      setShiftPlannerAccess({ loading: false, active: false });
       return;
     }
     hydrateLocalDraft(user.id);
     loadSavedData();
+    loadShiftPlannerAccess();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
@@ -769,6 +772,36 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
     setSavedDataLoaded(true);
   }
 
+  async function loadShiftPlannerAccess() {
+    if (!supabase || !user?.id) {
+      setShiftPlannerAccess({ loading: false, active: false });
+      return false;
+    }
+
+    setShiftPlannerAccess((current) => ({ ...current, loading: true }));
+    const { data, error } = await supabase
+      .from("subscriptions")
+      .select("product, status, current_period_end, expires_at")
+      .eq("user_id", user.id)
+      .eq("product", "shift_planner")
+      .in("status", ["active", "trialing", "paid"]);
+
+    if (error) {
+      setShiftPlannerAccess({ loading: false, active: false, error: error.message });
+      return false;
+    }
+
+    const active = (data || []).some((sub) => {
+      return (
+        (!sub.current_period_end || new Date(sub.current_period_end).getTime() > Date.now()) &&
+        (!sub.expires_at || new Date(sub.expires_at).getTime() > Date.now())
+      );
+    });
+
+    setShiftPlannerAccess({ loading: false, active });
+    return active;
+  }
+
   function hydrateLocalDraft(userId) {
     try {
       const draft = JSON.parse(window.localStorage.getItem(draftStorageKey(userId)) || "null");
@@ -922,6 +955,12 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
   async function importLaborTiersFromShiftPlanner() {
     if (!supabase || !user?.id) {
       setStatusMessage("Sign in to import labor tiers from Shift Planner.");
+      return;
+    }
+
+    const hasAccess = shiftPlannerAccess.active || (await loadShiftPlannerAccess());
+    if (!hasAccess) {
+      setStatusMessage("Shift Planner access is required before importing labor tiers.");
       return;
     }
 
@@ -1091,6 +1130,26 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
     }
     setModal(null);
     setStatusMessage(`Deleted ${menu.menu_name}.`);
+  }
+
+  async function deleteMenuItem(menu, itemIndex) {
+    const existingItems = menu.items || [];
+    const removedItem = existingItems[itemIndex];
+    if (!removedItem) return;
+
+    const nextItems = existingItems.filter((_, index) => index !== itemIndex);
+    const nextMenu = { ...menu, items: nextItems, updated_at: new Date().toISOString() };
+    await persistMenu(nextMenu);
+
+    const sameMenu = activeMenuId === menu.id || activeMenuId === menu.db_id;
+    if (sameMenu && activeMenuItemIndex === itemIndex) {
+      setActiveMenuItemIndex(null);
+    } else if (sameMenu && activeMenuItemIndex !== null && activeMenuItemIndex > itemIndex) {
+      setActiveMenuItemIndex(activeMenuItemIndex - 1);
+    }
+
+    setModal(null);
+    setStatusMessage(`Deleted ${removedItem.item_name || "item"} from ${menu.menu_name}.`);
   }
 
   function loadMenuItem(menu, index) {
@@ -1402,7 +1461,18 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
                     Name a cost profile first, then labor, overhead, packaging, fees, and basic assumptions will autosave into that profile.
                   </div>
                 )}
-                <EditableRows title="Labor tiers" rows={laborTiers} setRows={setLaborTiers} columns={[["role", "Role"], ["wage", "Wage"], ["hours_per_week", "Hours/wk"]]} newRow={{ role: "", wage: "", hours_per_week: "" }} />
+                <EditableRows
+                  title="Labor tiers"
+                  rows={laborTiers}
+                  setRows={setLaborTiers}
+                  columns={[["role", "Role"], ["wage", "Wage"], ["hours_per_week", "Hours/wk"]]}
+                  newRow={{ role: "", wage: "", hours_per_week: "" }}
+                  headerAction={
+                    <button type="button" onClick={importLaborTiersFromShiftPlanner} disabled={shiftPlannerAccess.loading}>
+                      {shiftPlannerAccess.loading ? "Checking Shift Planner..." : "Import from Shift Planner"}
+                    </button>
+                  }
+                />
                 <EditableRows title="Overhead items" rows={overheadItems} setRows={setOverheadItems} columns={[["name", "Expense"], ["monthly_cost", "Monthly $"]]} newRow={{ name: "", monthly_cost: "" }} />
                 {isPro ? (
                   <>
@@ -1414,8 +1484,14 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
                 )}
                 <div className="inline-actions">
                   <button type="button" onClick={saveCostConfig}>{activeCostConfigName ? "Save Cost Profile" : "Create Cost Profile"}</button>
-                  <button type="button" onClick={importLaborTiersFromShiftPlanner}>Import Labor Tiers from Shift Planner</button>
                   <button type="button" onClick={() => setOverheadItems(DEFAULT_OVERHEAD)}>Reset Overhead Defaults</button>
+                </div>
+                <div className={shiftPlannerAccess.active ? "integration-note active" : "integration-note"}>
+                  {shiftPlannerAccess.loading
+                    ? "Checking whether this account owns Shift Planner."
+                    : shiftPlannerAccess.active
+                      ? "Shift Planner connected. Import will use roles, wages, and scheduled/max hours from your latest saved schedule."
+                      : "Shift Planner is not active on this account, so labor tier import is locked."}
                 </div>
                 {savedCostConfigs.length > 0 && (
                   <div className="saved-list">
@@ -1531,6 +1607,14 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
                       onLoad={loadMenuItem}
                       onExport={exportCsv}
                       onDelete={(target) => setModal({ type: "confirm-delete", title: "Delete Menu", target, targetKind: "menu" })}
+                      onDeleteItem={(targetMenu, targetIndex) =>
+                        setModal({
+                          type: "confirm-delete",
+                          title: "Delete Menu Item",
+                          target: { menu: targetMenu, itemIndex: targetIndex, item: targetMenu.items?.[targetIndex] },
+                          targetKind: "menu-item",
+                        })
+                      }
                     />
                   ))}
                 </div>
@@ -1565,6 +1649,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
           onSelectCost={selectNewItemCostConfig}
           onSkipCosts={skipNewItemCosts}
           onDeleteMenu={deleteMenu}
+          onDeleteMenuItem={deleteMenuItem}
           onDeleteCost={deleteCostConfig}
         />
       )}
@@ -1587,6 +1672,7 @@ function PricingModal({
   onSelectCost,
   onSkipCosts,
   onDeleteMenu,
+  onDeleteMenuItem,
   onDeleteCost,
 }) {
   const isNameModal = modal.type === "cost-name" || modal.type === "menu-name";
@@ -1713,14 +1799,18 @@ function PricingModal({
         {modal.type === "confirm-delete" && (
           <div className="pricing-modal-body">
             <p className="muted-copy">
-              Delete {modal.targetKind === "menu" ? modal.target?.menu_name : modal.target?.name}? This cannot be undone.
+              Delete {deleteTargetLabel(modal)}? This cannot be undone.
             </p>
             <div className="pricing-modal-actions">
               <button type="button" onClick={() => setModal(null)}>Cancel</button>
               <button
                 type="button"
                 className="danger-lite"
-                onClick={() => (modal.targetKind === "menu" ? onDeleteMenu(modal.target) : onDeleteCost(modal.target))}
+                onClick={() => {
+                  if (modal.targetKind === "menu") onDeleteMenu(modal.target);
+                  if (modal.targetKind === "cost") onDeleteCost(modal.target);
+                  if (modal.targetKind === "menu-item") onDeleteMenuItem(modal.target.menu, modal.target.itemIndex);
+                }}
               >
                 Delete
               </button>
@@ -1828,6 +1918,13 @@ function Kpi({ label, value }) {
   return <div className="kpi"><span>{label}</span><strong>{value}</strong></div>;
 }
 
+function deleteTargetLabel(modal) {
+  if (modal.targetKind === "menu") return modal.target?.menu_name || "this menu";
+  if (modal.targetKind === "cost") return modal.target?.name || "this cost profile";
+  if (modal.targetKind === "menu-item") return modal.target?.item?.item_name || "this menu item";
+  return "this item";
+}
+
 function Breakdown({ title, rows }) {
   return (
     <div className="breakdown">
@@ -1849,13 +1946,16 @@ function Field({ label, value, onChange, disabled = false, hint = "" }) {
   );
 }
 
-function EditableRows({ title, rows, setRows, columns, newRow, className = "" }) {
+function EditableRows({ title, rows, setRows, columns, newRow, className = "", headerAction = null }) {
   const blank = newRow || Object.fromEntries(columns.map(([key]) => [key, ""]));
   return (
     <div className={`editable-block ${className}`}>
       <div className="panel-head">
         <h3>{title}</h3>
-        <button type="button" onClick={() => setRows((current) => [...current, { ...blank }])}>Add</button>
+        <div className="inline-actions compact-actions">
+          {headerAction}
+          <button type="button" onClick={() => setRows((current) => [...current, { ...blank }])}>Add</button>
+        </div>
       </div>
       <div className="editable-rows">
         {rows.map((row, index) => (
@@ -1878,7 +1978,7 @@ function EditableRows({ title, rows, setRows, columns, newRow, className = "" })
   );
 }
 
-function MenuPanel({ menu, onLoad, onExport, onDelete }) {
+function MenuPanel({ menu, onLoad, onExport, onDelete, onDeleteItem }) {
   const totals = (menu.items || []).map((item) => calculatePricing(normalizeSavedItem(item)));
   const avgCost = totals.length ? totals.reduce((sum, result) => sum + result.trueCost, 0) / totals.length : 0;
   const avgRecommended = totals.length ? totals.reduce((sum, result) => sum + result.recommendedPrice, 0) / totals.length : 0;
@@ -1898,10 +1998,13 @@ function MenuPanel({ menu, onLoad, onExport, onDelete }) {
         {(menu.items || []).map((item, index) => {
           const result = calculatePricing(normalizeSavedItem(item));
           return (
-            <button key={`${item.item_name}-${index}`} type="button" onClick={() => onLoad(menu, index)}>
-              <span>{item.item_name}</span>
-              <strong>{money(result.recommendedPrice)}</strong>
-            </button>
+            <div className="menu-item-row" key={`${item.item_name}-${index}`}>
+              <button type="button" onClick={() => onLoad(menu, index)}>
+                <span>{item.item_name}</span>
+                <strong>{money(result.recommendedPrice)}</strong>
+              </button>
+              <button type="button" className="danger-lite" onClick={() => onDeleteItem(menu, index)}>Delete</button>
+            </div>
           );
         })}
       </div>
