@@ -313,6 +313,22 @@ h2 {
   background: rgba(34,211,197,0.10);
 }
 
+.btn.trial {
+  color: var(--text);
+  background: rgba(34,211,197,0.10);
+  border: 1px solid rgba(34,211,197,0.28);
+}
+
+.btn.trial .btn-sub {
+  color: rgba(185,199,214,0.84);
+}
+
+.btn.trial:hover {
+  transform: translateY(-1px);
+  border-color: rgba(34,211,197,0.48);
+  background: rgba(34,211,197,0.16);
+}
+
 .btn.locked {
   cursor: not-allowed;
   color: rgba(185,199,214,0.72);

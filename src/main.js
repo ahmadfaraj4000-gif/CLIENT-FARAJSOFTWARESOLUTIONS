@@ -25,6 +25,7 @@ const products = [
     description:
       'Adds delivery and card fee modeling, competitor positioning, saved cost structures, menus, scenarios, and CSV export.',
     price: '$19.99/mo',
+    trialDays: 7,
     subscriptionKeys: ['pricing_assistant_pro'],
     stripeLink:
       import.meta.env.VITE_STRIPE_PRICING_ASSISTANT_PRO_LINK ||
@@ -281,6 +282,15 @@ function productCard(product) {
       <p>${product.description}</p>
 
       <div class="card-actions">
+        ${
+          !active && product.trialDays
+            ? `<button class="btn trial" type="button" data-trial-product="${product.id}">
+                Start ${product.trialDays}-day trial
+                <span class="btn-sub">one trial per email</span>
+              </button>`
+            : ''
+        }
+
         <a class="btn primary" href="${buildStripeUrl(product)}" target="_blank" rel="noopener">
           Subscribe with Stripe
           <span class="btn-sub">secure checkout</span>
@@ -318,6 +328,45 @@ function bindEvents() {
       render();
     });
   });
+
+  document.querySelectorAll('[data-trial-product]').forEach((btn) => {
+    btn.addEventListener('click', () => startTrial(btn.dataset.trialProduct));
+  });
+}
+
+async function startTrial(productId) {
+  const product = products.find((item) => item.id === productId);
+  const subscriptionProduct = productToSubscriptionKey(productId);
+
+  if (!state.user) {
+    state.message = 'Create an account or sign in before starting a trial.';
+    render();
+    return;
+  }
+
+  if (!hasSupabaseConfig || !supabase) {
+    state.message = 'Supabase is not configured, so trials cannot be started yet.';
+    render();
+    return;
+  }
+
+  state.message = `Starting ${product?.name || 'trial'}...`;
+  render();
+
+  const { data, error } = await supabase.rpc('start_product_trial', {
+    requested_product: subscriptionProduct,
+  });
+
+  if (error) {
+    state.message = error.message;
+    render();
+    return;
+  }
+
+  await loadSubscriptions();
+  const expiresAt = data?.[0]?.expires_at ? new Date(data[0].expires_at).toLocaleDateString() : '7 days';
+  state.message = `${product?.name || 'Trial'} is active until ${expiresAt}.`;
+  render();
 }
 
 async function submitAuth(event) {
