@@ -1,0 +1,4626 @@
+[
+  {
+    "id": "italian",
+    "name": "Italian Cuisine",
+    "description": "Classic Italian-American pizzeria and pasta restaurant",
+    "common_ingredients": [
+      {
+        "name": "Pizza Dough (14\")",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Thin Crust Dough",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Gluten-Free Pizza Base",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.0,
+        "note": "Approx 0.5 lb lb"
+      },
+      {
+        "name": "Marinara Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Pasta (Dry)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Tomato Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Mozzarella Cheese (Shredded)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Provolone Cheese",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Ricotta Cheese",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.04
+      },
+      {
+        "name": "Feta Cheese (Crumbled)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Romano Cheese (Grated)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Parmesan Cheese (Grated)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Pepperoni (Sliced)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Italian Sausage (Raw, bulk)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Hamburger (80/20)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Meatballs (Pre-cooked)",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02,
+        "note": "Approx 2 oz lb meatball"
+      },
+      {
+        "name": "Bacon (Raw)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Grilled Chicken Breast",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.07
+      },
+      {
+        "name": "Steak (for Philly)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Ham (Deli Sliced)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Salami (Deli Sliced)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Roast Beef (Deli Sliced)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Turkey Breast (Deli Sliced)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Fresh Mushrooms (Sliced)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Green Bell Peppers",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Onions (Yellow)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Black Olives (Sliced)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Fresh Garlic",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Broccoli (Florets)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2
+      },
+      {
+        "name": "Spinach (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Jalape\u00f1o Peppers",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Banana Peppers",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Tomatoes (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Anchovies",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05,
+        "note": "Case converted to weight"
+      },
+      {
+        "name": "Baby Clams (Canned)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.0,
+        "note": "Case converted to weight"
+      },
+      {
+        "name": "Eggplant",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.18
+      },
+      {
+        "name": "Roasted Red Peppers (Jar)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Artichoke Hearts",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02,
+        "note": "Case converted to weight"
+      },
+      {
+        "name": "Pineapple (Canned)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.0,
+        "note": "Case converted to weight"
+      },
+      {
+        "name": "Hoagie Roll (12\")",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02,
+        "note": "Approx 0.25 lb lb"
+      },
+      {
+        "name": "Hoagie Roll (8\")",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02,
+        "note": "Approx 0.2 lb lb"
+      },
+      {
+        "name": "Hoagie Roll (16\")",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.03,
+        "note": "Approx 0.4 lb lb"
+      },
+      {
+        "name": "Dinner Bread",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02,
+        "note": "Approx 0.15 lb lb"
+      },
+      {
+        "name": "Garlic Bread",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02,
+        "note": "Approx 0.2 lb lb"
+      },
+      {
+        "name": "Lettuce (Iceberg)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2,
+        "note": "Case converted to weight"
+      },
+      {
+        "name": "Lettuce (Romaine)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.18,
+        "note": "Case converted to weight"
+      },
+      {
+        "name": "Cucumbers",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Greek Olives",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Red Cabbage",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Croutons",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "French Fries",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Curly Fries",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Sweet Potato Fries",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Onion Rings",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Cole Slaw",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "House Salad Dressing",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Ranch Dressing",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Caesar Dressing",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Blue Cheese Dressing",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.04,
+        "note": "1 gal \u2248 8.3 lb"
+      }
+    ],
+    "items": [
+      {
+        "category": "Pizza",
+        "item_name": "Large Cheese Pizza (14\")",
+        "ingredients": [
+          {
+            "name": "Pizza Dough (14\")",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Marinara Sauce",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Mozzarella Cheese (Shredded)",
+            "recipe_qty": 10,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Romano Cheese (Grated)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 4,
+        "notes": "Base template for a large cheese pizza. Add toppings as needed.",
+        "suggested_price": 16.0
+      },
+      {
+        "category": "Pizza",
+        "item_name": "Large Meat Lovers Pizza",
+        "ingredients": [
+          {
+            "name": "Pizza Dough (14\")",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Marinara Sauce",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Mozzarella Cheese (Shredded)",
+            "recipe_qty": 10,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pepperoni (Sliced)",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Italian Sausage (Raw, bulk)",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Meatballs (Pre-cooked)",
+            "recipe_qty": 2,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Bacon (Raw)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 5,
+        "notes": "Pepperoni, sausage, meatball, and bacon pizza.",
+        "suggested_price": 26.0
+      },
+      {
+        "category": "Grinders",
+        "item_name": "12\" Original Philly Steak & Cheese",
+        "ingredients": [
+          {
+            "name": "Steak (for Philly)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Provolone Cheese",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Green Bell Peppers",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Onions (Yellow)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Fresh Mushrooms (Sliced)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Hoagie Roll (12\")",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 6,
+        "notes": "Includes peppers, onions, and mushrooms.",
+        "suggested_price": 13.0
+      },
+      {
+        "category": "Pasta",
+        "item_name": "Dinner Spaghetti with Meat Sauce",
+        "ingredients": [
+          {
+            "name": "Pasta (Dry)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Marinara Sauce",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Hamburger (80/20)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Parmesan Cheese (Grated)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Dinner Bread",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 8,
+        "notes": "Comes with dinner salad and bread.",
+        "suggested_price": 14.5
+      },
+      {
+        "category": "Entrees",
+        "item_name": "Chicken Parmigiana Dinner",
+        "ingredients": [
+          {
+            "name": "Grilled Chicken Breast",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Marinara Sauce",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Mozzarella Cheese (Shredded)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pasta (Dry)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Marinara Sauce (for pasta)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "House Salad Mix",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Dinner Bread",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 10,
+        "notes": "Served with choice of two sides.",
+        "suggested_price": 20.0
+      },
+      {
+        "category": "Appetizers",
+        "item_name": "Fried Mozzarella",
+        "ingredients": [
+          {
+            "name": "Mozzarella Cheese (Block)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Bread Crumbs",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Egg Wash",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Marinara Sauce (for dipping)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Frying Oil",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 5,
+        "notes": "Served with marinara sauce.",
+        "suggested_price": 8.5
+      },
+      {
+        "category": "Salads",
+        "item_name": "Large Caesar Salad",
+        "ingredients": [
+          {
+            "name": "Lettuce (Romaine)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Caesar Dressing",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Croutons",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Parmesan Cheese (Grated)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Dinner Bread",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 3,
+        "notes": "Large Caesar salad with bread.",
+        "suggested_price": 9.0
+      }
+    ]
+  },
+  {
+    "id": "middle_eastern",
+    "name": "Middle Eastern Cuisine",
+    "description": "Authentic Lebanese and Middle Eastern cuisine",
+    "common_ingredients": [
+      {
+        "name": "Chicken Shawarma (Marinated)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Lamb Shawarma (Marinated)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Ground Sirloin (for Kafta)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Chicken Breast (for Shish Tawook)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Beef (for Hashweh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Ground Chickpeas (for Falafel)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Lamb (for dishes)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Tahini Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Garlic Sauce (Toum)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05,
+        "note": "1 qt \u2248 2.1 lb"
+      },
+      {
+        "name": "Tzatziki Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.06,
+        "note": "1 qt \u2248 2.1 lb"
+      },
+      {
+        "name": "Hummus",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Accawi Cheese",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.04
+      },
+      {
+        "name": "Plain Yogurt",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Labneh (Yogurt Cheese)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.04
+      },
+      {
+        "name": "Virgin Olive Oil",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 7.6 lb"
+      },
+      {
+        "name": "Pita Bread",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02,
+        "note": "Approx 0.15 lb lb"
+      },
+      {
+        "name": "Basmati Rice",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Parsley (Fresh, for Tabbouleh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2,
+        "note": "Approx 0.2 lb per bunch"
+      },
+      {
+        "name": "Eggplant",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.18
+      },
+      {
+        "name": "Tomatoes (Roma)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Cucumber",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Grape/Vine Leaves (for Waraq Enab)",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.05,
+        "note": "Jar converted to weight"
+      },
+      {
+        "name": "Brown Lentils",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Lettuce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15,
+        "note": "Approx 1 lb per head"
+      },
+      {
+        "name": "Onions (White)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Pickles (Turnips & Cucumbers)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Mint (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.25,
+        "note": "Approx 0.15 lb per bunch"
+      },
+      {
+        "name": "Spinach (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Za'atar",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Sumac",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Cracked Wheat (Bulgur)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Lemon Juice (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08,
+        "note": "1 gal \u2248 8.6 lb"
+      },
+      {
+        "name": "Garlic (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Chickpeas (Dried)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Falafel Mix",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Baba Ghanoush Base",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Tabbouleh Mix",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Fattoush Dressing",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03,
+        "note": "1 gal \u2248 8.3 lb"
+      }
+    ],
+    "items": [
+      {
+        "category": "Main Course",
+        "item_name": "Chicken Shawarma Platter",
+        "ingredients": [
+          {
+            "name": "Chicken Shawarma (Marinated)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Basmati Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Garlic Sauce (Toum)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Hummus",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "House Salad Mix",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pita Bread",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 5,
+        "notes": "Served with side dip of garlic sauce, rice, salad, and hummus.",
+        "suggested_price": 16.99
+      },
+      {
+        "category": "Gyros Sandwich",
+        "item_name": "Chicken Shawarma Sandwich",
+        "ingredients": [
+          {
+            "name": "Chicken Shawarma (Marinated)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pita Bread",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Tahini Sauce",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Lettuce",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomatoes (Roma)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Onions (White)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pickles (Turnips & Cucumbers)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 4,
+        "notes": "Includes lettuce, tomatoes, onions, pickles, and tahini sauce.",
+        "suggested_price": 9.99
+      },
+      {
+        "category": "Appetizer",
+        "item_name": "Hummus",
+        "ingredients": [
+          {
+            "name": "Hummus",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Virgin Olive Oil",
+            "recipe_qty": 0.25,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Parsley (Fresh, for Tabbouleh)",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pita Bread (for serving)",
+            "recipe_qty": 2,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 2,
+        "notes": "Classic chickpea and tahini dip. Add beef or chicken for premium version.",
+        "suggested_price": 7.99
+      },
+      {
+        "category": "Appetizer",
+        "item_name": "Baba Ghanoush",
+        "ingredients": [
+          {
+            "name": "Baba Ghanoush Base",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Virgin Olive Oil",
+            "recipe_qty": 0.25,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Parsley (Fresh, for Tabbouleh)",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pita Bread (for serving)",
+            "recipe_qty": 2,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 2,
+        "notes": "Grilled eggplant, tahini sauce, garlic, and virgin olive oil.",
+        "suggested_price": 8.99
+      },
+      {
+        "category": "Main Course",
+        "item_name": "Shish Tawook (2 Skewers)",
+        "ingredients": [
+          {
+            "name": "Chicken Breast (for Shish Tawook)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Basmati Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Garlic Sauce (Toum)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Hummus",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "House Salad Mix",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Grilled Tomato & Onion",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pita Bread",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 7,
+        "notes": "Two skewers of marinated chicken breast, grilled. Served with sides.",
+        "suggested_price": 18.99
+      },
+      {
+        "category": "Main Course",
+        "item_name": "Kafta Platter",
+        "ingredients": [
+          {
+            "name": "Ground Sirloin (for Kafta)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Basmati Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Garlic Sauce (Toum)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Hummus",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "House Salad Mix",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Grilled Tomato & Onion",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Spicy Bread",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 6,
+        "notes": "Skewer of kafta grilled on charcoal barbecue. Garnished with grilled tomato & onion.",
+        "suggested_price": 17.99
+      },
+      {
+        "category": "Gyros Sandwich",
+        "item_name": "Kafta Sandwich",
+        "ingredients": [
+          {
+            "name": "Ground Sirloin (for Kafta)",
+            "recipe_qty": 5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pita Bread",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Hummus",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Parsley (Fresh, for Tabbouleh)",
+            "recipe_qty": 0.2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Onions (White)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pickles (Turnips & Cucumbers)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomatoes (Roma)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 5,
+        "notes": "Kafta skewer with hummus, fresh parsley, onion, turnips, pickles and tomato.",
+        "suggested_price": 10.99
+      },
+      {
+        "category": "Appetizer",
+        "item_name": "Falafel Appetizer",
+        "ingredients": [
+          {
+            "name": "Falafel Mix",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tahini Sauce",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "House Salad Mix",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pickles (Turnips & Cucumbers)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pita Bread",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 4,
+        "notes": "Golden pieces of falafel garnished with mixed pickles, served with tahini sauce.",
+        "suggested_price": 8.99
+      },
+      {
+        "category": "Main Course",
+        "item_name": "Falafel Platter",
+        "ingredients": [
+          {
+            "name": "Falafel Mix",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tahini Sauce",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Hummus",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "House Salad Mix",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Basmati Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pita Bread",
+            "recipe_qty": 2,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 5,
+        "notes": "Falafel with tahini sauce, salad, hummus, and rice.",
+        "suggested_price": 14.99
+      }
+    ]
+  },
+  {
+    "id": "caribbean",
+    "name": "Caribbean Cuisine",
+    "description": "Authentic Jamaican and Caribbean cuisine",
+    "common_ingredients": [
+      {
+        "name": "Chicken (Whole, for Jerk)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Goat Meat (for Curry)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Oxtail",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2
+      },
+      {
+        "name": "Beef (for Pepper Steak)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Pork (for Jerk Pork)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Ground Beef (for Patties)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Salt Fish (Salted Cod)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Ackee (Canned)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.0,
+        "note": "Can converted to weight"
+      },
+      {
+        "name": "Callaloo Leaves",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.18,
+        "note": "Bunch converted to weight"
+      },
+      {
+        "name": "Scotch Bonnet Peppers",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Plantains (Sweet)",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Green Bananas",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Yam (Jamaican)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Coconut Milk (for Rice & Peas)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.0,
+        "note": "Can converted to weight"
+      },
+      {
+        "name": "Kidney Beans (for Rice & Peas)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Pigeon Peas (Gungo Peas)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Jerk Seasoning (Dry Mix)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Jerk Marinade (Wet)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Curry Powder (Jamaican)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Allspice (Pimento)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Thyme (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.25,
+        "note": "Bunch converted to weight"
+      },
+      {
+        "name": "Escallion (Green Onion)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15,
+        "note": "Bunch converted to weight"
+      },
+      {
+        "name": "Ginger (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2
+      },
+      {
+        "name": "Coco Bread",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02,
+        "note": "Approx 0.2 lb lb"
+      },
+      {
+        "name": "Patty Pastry Dough",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Hard Dough Bread",
+        "purchase_unit": "lb",
+        "recipe_unit": "slice",
+        "typical_waste_pct": 0.03,
+        "note": "Approx 1.5 lb per loaf"
+      },
+      {
+        "name": "Festival Dough Mix",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Cabbage (for Steaming)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2,
+        "note": "Approx 2 lb per head"
+      },
+      {
+        "name": "Carrots",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "White Rice",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Dumpling Flour",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Spinach (for Patties)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.18
+      },
+      {
+        "name": "Cheddar Cheese (for Patties)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Grace Tin Cheese",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.0,
+        "note": "Tin converted to weight"
+      },
+      {
+        "name": "Butter",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Brown Gravy Mix",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Scotch Bonnet Pepper Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02,
+        "note": "Bottle converted to weight"
+      },
+      {
+        "name": "Browning (for Stews)",
+        "purchase_unit": "lb",
+        "recipe_unit": "tsp",
+        "typical_waste_pct": 0.01,
+        "note": "Bottle converted to weight"
+      }
+    ],
+    "items": [
+      {
+        "category": "Main Course",
+        "item_name": "Jerk Chicken (with Rice & Peas, Cabbage)",
+        "ingredients": [
+          {
+            "name": "Chicken (Whole, for Jerk)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Jerk Marinade (Wet)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "White Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Kidney Beans (for Rice & Peas)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Coconut Milk (for Rice & Peas)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cabbage (for Steaming)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Thyme (Fresh)",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Scotch Bonnet Peppers",
+            "recipe_qty": 0.5,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 15,
+        "notes": "Authentic jerk chicken marinated overnight, grilled over pimento wood preferred. Served with rice & peas and steamed cabbage.",
+        "suggested_price": 11.29
+      },
+      {
+        "category": "Main Course",
+        "item_name": "Curry Goat",
+        "ingredients": [
+          {
+            "name": "Goat Meat (for Curry)",
+            "recipe_qty": 10,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Curry Powder (Jamaican)",
+            "recipe_qty": 1.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Potatoes",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Carrots",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "White Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cabbage (for Steaming)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Thyme (Fresh)",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Scotch Bonnet Peppers",
+            "recipe_qty": 0.5,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 25,
+        "notes": "Traditional curry goat slow-cooked until tender. Best when marinated in curry overnight.",
+        "suggested_price": 16.0
+      },
+      {
+        "category": "Main Course",
+        "item_name": "Oxtail",
+        "ingredients": [
+          {
+            "name": "Oxtail",
+            "recipe_qty": 10,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Butter Beans",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Carrots",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Browning (for Stews)",
+            "recipe_qty": 1,
+            "recipe_unit": "tsp"
+          },
+          {
+            "name": "White Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cabbage (for Steaming)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Thyme (Fresh)",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Scotch Bonnet Peppers",
+            "recipe_qty": 0.25,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 30,
+        "notes": "Oxtail slow-braised until fall-off-the-bone tender with butter beans in rich gravy.",
+        "suggested_price": 19.0
+      },
+      {
+        "category": "Pastries",
+        "item_name": "Beef Patty",
+        "ingredients": [
+          {
+            "name": "Patty Pastry Dough",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Ground Beef (for Patties)",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Scotch Bonnet Peppers",
+            "recipe_qty": 0.25,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Thyme (Fresh)",
+            "recipe_qty": 0.05,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Onions",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Bread Crumbs",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 8,
+        "notes": "Flaky golden crust filled with seasoned ground beef. Can add cheese for Cheesy Beef Patty variant.",
+        "suggested_price": 3.8
+      },
+      {
+        "category": "Main Course",
+        "item_name": "Ackee & Salt Fish",
+        "ingredients": [
+          {
+            "name": "Ackee (Canned)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Salt Fish (Salted Cod)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Onions",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Bell Peppers",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomatoes",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Scotch Bonnet Peppers",
+            "recipe_qty": 0.25,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "White Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Fried Plantains",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 12,
+        "notes": "Jamaica's national dish. Saltfish must be soaked overnight to remove excess salt.",
+        "suggested_price": 18.0
+      },
+      {
+        "category": "Main Course",
+        "item_name": "Pepper Steak (with Rice & Peas, Cabbage)",
+        "ingredients": [
+          {
+            "name": "Beef (for Pepper Steak)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Bell Peppers",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Onions",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomatoes",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "White Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Kidney Beans (for Rice & Peas)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cabbage (for Steaming)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Browning (for Stews)",
+            "recipe_qty": 1,
+            "recipe_unit": "tsp"
+          }
+        ],
+        "labor_minutes": 10,
+        "notes": "Tender beef strips stir-fried with bell peppers in peppercorn sauce.",
+        "suggested_price": 15.55
+      },
+      {
+        "category": "Sides",
+        "item_name": "Rice & Peas",
+        "ingredients": [
+          {
+            "name": "White Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Kidney Beans (for Rice & Peas)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Coconut Milk (for Rice & Peas)",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Thyme (Fresh)",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Escallion (Green Onion)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Scotch Bonnet Pepper",
+            "recipe_qty": 0.25,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 5,
+        "notes": "Classic Jamaican rice and peas (actually kidney beans). The scotch bonnet is added whole for flavor, not chopped.",
+        "suggested_price": 6.55
+      },
+      {
+        "category": "Breakfast/Side",
+        "item_name": "Callaloo & Salt Fish",
+        "ingredients": [
+          {
+            "name": "Callaloo Leaves",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Salt Fish (Salted Cod)",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Onions",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomatoes",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Scotch Bonnet Peppers",
+            "recipe_qty": 0.25,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Thyme (Fresh)",
+            "recipe_qty": 0.05,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Boiled Green Banana",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 10,
+        "notes": "Traditional breakfast or side dish. Callaloo is like Jamaican spinach.",
+        "suggested_price": 9.89
+      },
+      {
+        "category": "Sandwich",
+        "item_name": "Jerk Chicken Sandwich",
+        "ingredients": [
+          {
+            "name": "Chicken (Whole, for Jerk)",
+            "recipe_qty": 5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Coco Bread",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Coleslaw",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Chipotle Mayo",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Lettuce",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomato",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 6,
+        "notes": "Jerk chicken on coco bread with coleslaw and chipotle mayo.",
+        "suggested_price": 10.79
+      },
+      {
+        "category": "Side",
+        "item_name": "Sweet Plantains",
+        "ingredients": [
+          {
+            "name": "Plantains (Sweet)",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Vegetable Oil",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Brown Sugar (optional)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 3,
+        "notes": "Ripe plantains sliced and fried until caramelized.",
+        "suggested_price": 2.0
+      }
+    ]
+  },
+  {
+    "id": "mexican",
+    "name": "Mexican Cuisine",
+    "description": "Authentic Mexican restaurant and taqueria",
+    "common_ingredients": [
+      {
+        "name": "Carne Asada (Skirt Steak)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Al Pastor Pork (Marinated)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Chicken (for Pollo Asado)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Carnitas (Braised Pork)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Chorizo (Mexican Sausage)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Barbacoa (Beef Cheek)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Lengua (Beef Tongue)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2
+      },
+      {
+        "name": "Camarones (Shrimp)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Ground Beef (85/15)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Corn Tortillas (6\")",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02,
+        "note": "Approx 0.05 lb lb"
+      },
+      {
+        "name": "Flour Tortillas (10\")",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02,
+        "note": "Approx 0.1 lb lb"
+      },
+      {
+        "name": "Tortilla Chips",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Tostada Shells",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.04,
+        "note": "Approx 0.08 lb lb"
+      },
+      {
+        "name": "Taco Shells (Hard)",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.05,
+        "note": "Approx 0.06 lb lb"
+      },
+      {
+        "name": "Pinto Beans (Dry)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Black Beans (Dry)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Refried Beans",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Mexican Rice",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Cilantro Lime Rice",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Queso Fresco (Crumbled)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Cotija Cheese (Grated)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Monterey Jack Cheese",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Queso Oaxaca (String Cheese)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.04
+      },
+      {
+        "name": "Sour Cream",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.04
+      },
+      {
+        "name": "Mexican Crema",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05,
+        "note": "1 qt \u2248 2.1 lb"
+      },
+      {
+        "name": "White Onions",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Cilantro (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.25,
+        "note": "Approx 0.2 lb per bunch"
+      },
+      {
+        "name": "Roma Tomatoes",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Jalape\u00f1o Peppers",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Serrano Peppers",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Poblano Peppers",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Iceberg Lettuce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2,
+        "note": "Approx 1 lb per head"
+      },
+      {
+        "name": "Avocados (for Guacamole)",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.15,
+        "note": "Approx 0.3 lb lb"
+      },
+      {
+        "name": "Limes",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Garlic (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Salsa Roja (Red Salsa)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Salsa Verde (Green Salsa)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Pico de Gallo",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Guacamole",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.06
+      },
+      {
+        "name": "Queso Dip",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.04
+      },
+      {
+        "name": "Enchilada Sauce (Red)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Enchilada Sauce (Green)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Mole Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Chili Powder",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Cumin (Ground)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Mexican Oregano",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Epazote (Dried)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Achiote Paste",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Vegetable Oil",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 7.6 lb"
+      },
+      {
+        "name": "Lard (Manteca)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Corn Husks (for Tamales)",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.1,
+        "note": "Bag converted to weight"
+      },
+      {
+        "name": "Masa Harina (Corn Flour)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      }
+    ],
+    "items": [
+      {
+        "category": "Tacos",
+        "item_name": "Carne Asada Tacos (3 tacos)",
+        "ingredients": [
+          {
+            "name": "Carne Asada (Skirt Steak)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Corn Tortillas (6\")",
+            "recipe_qty": 3,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "White Onions",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cilantro (Fresh)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Salsa Roja (Red Salsa)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Limes",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 6,
+        "notes": "Traditional street tacos with grilled steak, onions, cilantro, and lime.",
+        "suggested_price": 12.99
+      },
+      {
+        "category": "Tacos",
+        "item_name": "Al Pastor Tacos (3 tacos)",
+        "ingredients": [
+          {
+            "name": "Al Pastor Pork (Marinated)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Corn Tortillas (6\")",
+            "recipe_qty": 3,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Pineapple (Fresh)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "White Onions",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cilantro (Fresh)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Salsa Roja (Red Salsa)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 5,
+        "notes": "Marinated pork cooked on vertical spit with pineapple. Authentic street-style.",
+        "suggested_price": 11.99
+      },
+      {
+        "category": "Burritos",
+        "item_name": "California Burrito",
+        "ingredients": [
+          {
+            "name": "Carne Asada (Skirt Steak)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "French Fries",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Flour Tortillas (10\")",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Guacamole",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pico de Gallo",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sour Cream",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Monterey Jack Cheese",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 8,
+        "notes": "San Diego-style burrito with carne asada, french fries, guacamole, and cheese.",
+        "suggested_price": 14.99
+      },
+      {
+        "category": "Enchiladas",
+        "item_name": "Chicken Enchiladas (3 enchiladas)",
+        "ingredients": [
+          {
+            "name": "Chicken (for Pollo Asado)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Corn Tortillas (6\")",
+            "recipe_qty": 3,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Enchilada Sauce (Red)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Monterey Jack Cheese",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Mexican Rice",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Refried Beans",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sour Cream",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 10,
+        "notes": "Three chicken enchiladas topped with red sauce and melted cheese. Served with rice and beans.",
+        "suggested_price": 16.99
+      },
+      {
+        "category": "Platters",
+        "item_name": "Carnitas Platter",
+        "ingredients": [
+          {
+            "name": "Carnitas (Braised Pork)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Mexican Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Refried Beans",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Corn Tortillas (6\")",
+            "recipe_qty": 3,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Pico de Gallo",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Guacamole",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sour Cream",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Limes",
+            "recipe_qty": 2,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 7,
+        "notes": "Slow-braised pork shoulder, crispy on the outside, tender inside. Served with all the fixings.",
+        "suggested_price": 18.99
+      },
+      {
+        "category": "Appetizers",
+        "item_name": "Nachos Supreme",
+        "ingredients": [
+          {
+            "name": "Tortilla Chips",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Ground Beef (85/15)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Monterey Jack Cheese",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Refried Beans",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pico de Gallo",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Jalape\u00f1o Peppers",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sour Cream",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Guacamole",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 8,
+        "notes": "Loaded nachos with seasoned ground beef, beans, cheese, and all toppings.",
+        "suggested_price": 13.99
+      },
+      {
+        "category": "Specialties",
+        "item_name": "Chiles Rellenos",
+        "ingredients": [
+          {
+            "name": "Poblano Peppers",
+            "recipe_qty": 2,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Monterey Jack Cheese",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Egg Batter",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomato Sauce",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Mexican Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Refried Beans",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sour Cream",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 12,
+        "notes": "Roasted poblano peppers stuffed with cheese, battered and fried. Served with tomato sauce.",
+        "suggested_price": 17.99
+      },
+      {
+        "category": "Quesadillas",
+        "item_name": "Grilled Chicken Quesadilla",
+        "ingredients": [
+          {
+            "name": "Flour Tortillas (10\")",
+            "recipe_qty": 2,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Chicken (for Pollo Asado)",
+            "recipe_qty": 5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Monterey Jack Cheese",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pico de Gallo",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sour Cream",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Guacamole",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Salsa Roja (Red Salsa)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 6,
+        "notes": "Large flour tortilla stuffed with grilled chicken and cheese, served with sides.",
+        "suggested_price": 12.99
+      },
+      {
+        "category": "Soups",
+        "item_name": "Tortilla Soup",
+        "ingredients": [
+          {
+            "name": "Chicken (for Pollo Asado)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Chicken Broth",
+            "recipe_qty": 12,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Roma Tomatoes",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Avocado",
+            "recipe_qty": 0.5,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Tortilla Strips",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Monterey Jack Cheese",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sour Cream",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Limes",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 5,
+        "notes": "Hearty chicken soup with avocado, cheese, tortilla strips, and lime.",
+        "suggested_price": 10.99
+      },
+      {
+        "category": "Appetizers",
+        "item_name": "Guacamole (Fresh)",
+        "ingredients": [
+          {
+            "name": "Avocados (for Guacamole)",
+            "recipe_qty": 2,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Roma Tomatoes",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "White Onions",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cilantro (Fresh)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Jalape\u00f1o Peppers",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Limes",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Tortilla Chips",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 4,
+        "notes": "Freshly made guacamole tableside style. Add $1.50 for extra ingredients like bacon or pomegranate.",
+        "suggested_price": 9.99
+      },
+      {
+        "category": "Tamales",
+        "item_name": "Pork Tamales (2 tamales)",
+        "ingredients": [
+          {
+            "name": "Masa Harina (Corn Flour)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pork (Shredded)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Corn Husks (for Tamales)",
+            "recipe_qty": 2,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Red Chili Sauce",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Mexican Rice",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Refried Beans",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 15,
+        "notes": "Traditional steamed corn dough filled with seasoned pork. Labor intensive but authentic.",
+        "suggested_price": 14.99
+      }
+    ]
+  },
+  {
+    "id": "asian",
+    "name": "Asian Cuisine",
+    "description": "Asian fusion restaurant with Chinese, Japanese, and Thai influences",
+    "common_ingredients": [
+      {
+        "name": "Chicken Breast (Boneless)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Beef (Sirloin, for Stir-fry)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Pork (Loin, for dishes)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Shrimp (16-20 count)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Salmon Fillet (Skin-on)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Tofu (Firm)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Duck (Whole)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.25
+      },
+      {
+        "name": "Scallops (U-10)",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.03,
+        "note": "Purchased by weight, approx 1 oz lb"
+      },
+      {
+        "name": "Jasmine Rice",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Sushi Rice",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Rice Noodles (Dry)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Udon Noodles (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Ramen Noodles",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Egg Noodles (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Vermicelli (Rice Sticks)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Bok Choy",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15,
+        "note": "Bunch converted to weight"
+      },
+      {
+        "name": "Snow Peas",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Bean Sprouts",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2
+      },
+      {
+        "name": "Napa Cabbage",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15,
+        "note": "Head converted to weight"
+      },
+      {
+        "name": "Shiitake Mushrooms (Dried)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Shiitake Mushrooms (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Bamboo Shoots (Canned)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.0,
+        "note": "Can converted to weight"
+      },
+      {
+        "name": "Water Chestnuts (Canned)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.0,
+        "note": "Can converted to weight"
+      },
+      {
+        "name": "Baby Corn (Canned)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.0,
+        "note": "Can converted to weight"
+      },
+      {
+        "name": "Carrots (Julienne)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2
+      },
+      {
+        "name": "Bell Peppers (Mixed)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Scallions (Green Onions)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15,
+        "note": "Bunch converted to weight"
+      },
+      {
+        "name": "Ginger (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.25
+      },
+      {
+        "name": "Garlic (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Soy Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Oyster Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Hoisin Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Fish Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Sriracha",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Sweet Chili Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Teriyaki Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Plum Sauce",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Sesame Oil",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 7.6 lb"
+      },
+      {
+        "name": "Rice Vinegar",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Mirin (Sweet Rice Wine)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Sake (Cooking)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 8.3 lb"
+      },
+      {
+        "name": "Five-Spice Powder",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Szechuan Peppercorns",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Star Anise",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Cilantro (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.25,
+        "note": "Bunch converted to weight"
+      },
+      {
+        "name": "Thai Basil (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.3,
+        "note": "Bunch converted to weight"
+      },
+      {
+        "name": "Mint (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.25,
+        "note": "Bunch converted to weight"
+      },
+      {
+        "name": "Lemongrass",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2
+      },
+      {
+        "name": "Nori (Seaweed Sheets)",
+        "purchase_unit": "lb",
+        "recipe_unit": "sheet",
+        "typical_waste_pct": 0.02,
+        "note": "Pack converted to weight"
+      },
+      {
+        "name": "Wasabi Powder",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Pickled Ginger",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Tempura Batter Mix",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Panko Bread Crumbs",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Spring Roll Wrappers",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.05,
+        "note": "Pack converted to weight"
+      },
+      {
+        "name": "Wonton Wrappers",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.05,
+        "note": "Pack converted to weight"
+      },
+      {
+        "name": "Vegetable Oil",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 7.6 lb"
+      },
+      {
+        "name": "Peanut Oil",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 7.6 lb"
+      },
+      {
+        "name": "Sesame Seeds (Toasted)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      }
+    ],
+    "items": [
+      {
+        "category": "Chinese",
+        "item_name": "General Tso's Chicken",
+        "ingredients": [
+          {
+            "name": "Chicken Breast (Boneless)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cornstarch (for coating)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "General Tso's Sauce",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Broccoli (Florets)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Bell Peppers (Mixed)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Jasmine Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Scallions (Green Onions)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sesame Seeds (Toasted)",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 10,
+        "notes": "Crispy fried chicken in sweet and spicy sauce. Most popular Chinese-American dish.",
+        "suggested_price": 16.99
+      },
+      {
+        "category": "Japanese",
+        "item_name": "Chicken Teriyaki",
+        "ingredients": [
+          {
+            "name": "Chicken Breast (Boneless)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Teriyaki Sauce",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Broccoli (Florets)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Carrots (Julienne)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Jasmine Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Scallions (Green Onions)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sesame Seeds (Toasted)",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 8,
+        "notes": "Grilled chicken glazed with teriyaki sauce. Served with steamed vegetables and rice.",
+        "suggested_price": 15.99
+      },
+      {
+        "category": "Thai",
+        "item_name": "Pad Thai (Shrimp)",
+        "ingredients": [
+          {
+            "name": "Rice Noodles (Dry)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Shrimp (16-20 count)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tofu (Firm)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Bean Sprouts",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Scallions (Green Onions)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Egg",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Pad Thai Sauce",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Peanuts (Crushed)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Lime",
+            "recipe_qty": 0.5,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 12,
+        "notes": "Thailand's national dish. Stir-fried rice noodles with shrimp, tofu, egg, and tamarind sauce.",
+        "suggested_price": 17.99
+      },
+      {
+        "category": "Sushi",
+        "item_name": "California Roll (8 pieces)",
+        "ingredients": [
+          {
+            "name": "Sushi Rice",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Nori (Seaweed Sheets)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "sheet"
+          },
+          {
+            "name": "Imitation Crab (Surimi)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Avocado",
+            "recipe_qty": 0.25,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Cucumber",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sesame Seeds (Toasted)",
+            "recipe_qty": 0.2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Wasabi",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pickled Ginger",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Soy Sauce",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 15,
+        "notes": "Most popular sushi roll in America. Inside-out roll with crab, avocado, and cucumber.",
+        "suggested_price": 9.99
+      },
+      {
+        "category": "Appetizers",
+        "item_name": "Vegetable Spring Rolls (4 pieces)",
+        "ingredients": [
+          {
+            "name": "Spring Roll Wrappers",
+            "recipe_qty": 4,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Cabbage (Shredded)",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Carrots (Julienne)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Bean Sprouts",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Shiitake Mushrooms (Fresh)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Glass Noodles (Bean Thread)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sweet Chili Sauce",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Frying Oil",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 8,
+        "notes": "Crispy fried spring rolls with vegetable filling. Served with sweet chili sauce.",
+        "suggested_price": 8.99
+      },
+      {
+        "category": "Soups",
+        "item_name": "Chicken Tom Yum Soup",
+        "ingredients": [
+          {
+            "name": "Chicken Breast (Boneless)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Chicken Broth",
+            "recipe_qty": 12,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Lemongrass",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Galangal (or Ginger)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Kaffir Lime Leaves",
+            "recipe_qty": 2,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Mushrooms (Straw or Button)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Thai Chili Peppers",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Lime Juice",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cilantro (Fresh)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 6,
+        "notes": "Classic Thai hot and sour soup. Can be made with shrimp instead of chicken.",
+        "suggested_price": 10.99
+      },
+      {
+        "category": "Noodles",
+        "item_name": "Beef Chow Fun",
+        "ingredients": [
+          {
+            "name": "Beef (Sirloin, for Stir-fry)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Rice Noodles (Fresh, wide)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Bean Sprouts",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Scallions (Green Onions)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Dark Soy Sauce",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Oyster Sauce",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Bean Sprouts",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sesame Oil",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 9,
+        "notes": "Cantonese-style wide rice noodles stir-fried with beef and bean sprouts.",
+        "suggested_price": 16.99
+      },
+      {
+        "category": "Curries",
+        "item_name": "Thai Green Curry (Chicken)",
+        "ingredients": [
+          {
+            "name": "Chicken Breast (Boneless)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Green Curry Paste",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Coconut Milk",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Eggplant (Thai)",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Bell Peppers (Mixed)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Thai Basil (Fresh)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Jasmine Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Fish Sauce",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 11,
+        "notes": "Spicy Thai curry with coconut milk, eggplant, and Thai basil. Adjust spice level.",
+        "suggested_price": 17.99
+      },
+      {
+        "category": "Appetizers",
+        "item_name": "Edamame (Soybeans)",
+        "ingredients": [
+          {
+            "name": "Edamame (Frozen in pods)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sea Salt",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sesame Oil",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Garlic (Minced)",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 3,
+        "notes": "Steamed soybeans in the pod, lightly salted. High profit margin appetizer.",
+        "suggested_price": 6.99
+      },
+      {
+        "category": "Japanese",
+        "item_name": "Tonkatsu (Pork Cutlet)",
+        "ingredients": [
+          {
+            "name": "Pork (Loin, for dishes)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Panko Bread Crumbs",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Egg (for breading)",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Tonkatsu Sauce",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cabbage (Shredded)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Jasmine Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Miso Soup",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 10,
+        "notes": "Japanese-style breaded and deep-fried pork cutlet. Served with shredded cabbage and rice.",
+        "suggested_price": 18.99
+      },
+      {
+        "category": "Sushi",
+        "item_name": "Spicy Tuna Roll (6 pieces)",
+        "ingredients": [
+          {
+            "name": "Sushi Rice",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Nori (Seaweed Sheets)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "sheet"
+          },
+          {
+            "name": "Tuna (Sushi-grade)",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Spicy Mayo",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Scallions (Green Onions)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sesame Seeds (Toasted)",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Wasabi",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pickled Ginger",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 12,
+        "notes": "Spicy tuna mixed with mayo and scallions. Popular sushi roll choice.",
+        "suggested_price": 11.99
+      },
+      {
+        "category": "Noodles",
+        "item_name": "Ramen (Pork Tonkotsu)",
+        "ingredients": [
+          {
+            "name": "Ramen Noodles",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Pork Broth (Tonkotsu)",
+            "recipe_qty": 12,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Chashu Pork (Sliced)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Soft-Boiled Egg",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Bamboo Shoots (Menma)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Nori (Seaweed Sheets)",
+            "recipe_qty": 0.25,
+            "recipe_unit": "sheet"
+          },
+          {
+            "name": "Scallions (Green Onions)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Wood Ear Mushrooms",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 8,
+        "notes": "Japanese ramen with rich pork bone broth. Labor intensive broth but high customer demand.",
+        "suggested_price": 15.99
+      }
+    ]
+  },
+  {
+    "id": "indian",
+    "name": "Indian Cuisine",
+    "description": "Authentic Indian restaurant with North and South Indian specialties",
+    "common_ingredients": [
+      {
+        "name": "Chicken (Boneless, for Curries)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Lamb (for Rogan Josh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Goat Meat (for curries)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.18
+      },
+      {
+        "name": "Paneer (Indian Cheese)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.04
+      },
+      {
+        "name": "Shrimp (for curries)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Fish (for curries)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2
+      },
+      {
+        "name": "Chickpeas (Dried)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Lentils (Masoor Dal)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Basmati Rice (Premium)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Naan Bread (Plain)",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02,
+        "note": "Approx 0.2 lb lb"
+      },
+      {
+        "name": "Roti/Chapati",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.02,
+        "note": "Approx 0.1 lb lb"
+      },
+      {
+        "name": "Paratha (Stuffed Bread)",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.03,
+        "note": "Approx 0.25 lb lb"
+      },
+      {
+        "name": "Papadum (Lentil Crackers)",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.05,
+        "note": "Pack converted to weight"
+      },
+      {
+        "name": "Onions (Red, for base)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.12
+      },
+      {
+        "name": "Tomatoes (for gravy)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Ginger (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.25
+      },
+      {
+        "name": "Garlic (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Green Chili Peppers",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.08
+      },
+      {
+        "name": "Potatoes",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Cauliflower",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.2,
+        "note": "Head converted to weight"
+      },
+      {
+        "name": "Spinach (Fresh)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.18
+      },
+      {
+        "name": "Peas (Frozen)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Bell Peppers",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.15
+      },
+      {
+        "name": "Eggplant",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.18
+      },
+      {
+        "name": "Ghee (Clarified Butter)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Yogurt (Plain, for marinades)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.05
+      },
+      {
+        "name": "Heavy Cream",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.04,
+        "note": "1 qt \u2248 2.1 lb"
+      },
+      {
+        "name": "Butter",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Garam Masala",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Turmeric Powder",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Cumin Seeds",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Coriander Powder",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Red Chili Powder",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Fenugreek Leaves (Kasuri Methi)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Cardamom Pods (Green)",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Cinnamon Sticks",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Cloves",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Bay Leaves",
+        "purchase_unit": "lb",
+        "recipe_unit": "lb",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Mustard Seeds",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Curry Leaves",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.1
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Tomato Puree",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.0,
+        "note": "Can converted to weight"
+      },
+      {
+        "name": "Tamarind Paste",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01
+      },
+      {
+        "name": "Coconut Milk (for curries)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.0,
+        "note": "Can converted to weight"
+      },
+      {
+        "name": "Tandoori Marinade",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Yogurt Marinade Base",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Food Color (Red/Orange)",
+        "purchase_unit": "lb",
+        "recipe_unit": "tsp",
+        "typical_waste_pct": 0.01,
+        "note": "Oz converted to weight"
+      },
+      {
+        "name": "Mint Chutney",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.03
+      },
+      {
+        "name": "Tamarind Chutney",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      },
+      {
+        "name": "Cucumber Raita",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.04
+      },
+      {
+        "name": "Mango Chutney",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02,
+        "note": "Jar converted to weight"
+      },
+      {
+        "name": "Vegetable Oil",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 7.6 lb"
+      },
+      {
+        "name": "Mustard Oil",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.01,
+        "note": "1 gal \u2248 7.6 lb"
+      },
+      {
+        "name": "Cashew Paste (for gravies)",
+        "purchase_unit": "lb",
+        "recipe_unit": "oz",
+        "typical_waste_pct": 0.02
+      }
+    ],
+    "items": [
+      {
+        "category": "Tandoori Specialties",
+        "item_name": "Chicken Tikka Masala",
+        "ingredients": [
+          {
+            "name": "Chicken (Boneless, for Curries)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tandoori Marinade",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomato Puree",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Heavy Cream",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Garam Masala",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Basmati Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Naan Bread (Plain)",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Butter",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 15,
+        "notes": "Britain's national dish! Grilled chicken chunks in creamy tomato sauce. Marinate chicken overnight for best flavor.",
+        "suggested_price": 18.99
+      },
+      {
+        "category": "Tandoori Specialties",
+        "item_name": "Butter Chicken (Murgh Makhani)",
+        "ingredients": [
+          {
+            "name": "Chicken (Boneless, for Curries)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tandoori Marinade",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomato Puree",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Butter",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Heavy Cream",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cashew Paste (for gravies)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Basmati Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Naan Bread (Plain)",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 15,
+        "notes": "Creamy, buttery tomato-based curry. Cashew paste adds richness and thickens the gravy.",
+        "suggested_price": 19.99
+      },
+      {
+        "category": "Vegetarian",
+        "item_name": "Paneer Tikka Masala",
+        "ingredients": [
+          {
+            "name": "Paneer (Indian Cheese)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Bell Peppers",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Onions (Red, for base)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomato Puree",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Heavy Cream",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Garam Masala",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Basmati Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Naan Bread (Plain)",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 12,
+        "notes": "Cubes of Indian cheese in creamy tomato sauce. Popular vegetarian option.",
+        "suggested_price": 16.99
+      },
+      {
+        "category": "Lamb Dishes",
+        "item_name": "Lamb Rogan Josh",
+        "ingredients": [
+          {
+            "name": "Lamb (for Rogan Josh)",
+            "recipe_qty": 10,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Yogurt (Plain, for marinades)",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomatoes (for gravy)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Kashmiri Red Chili Powder",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Garam Masala",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Basmati Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Naan Bread (Plain)",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Ghee (Clarified Butter)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 25,
+        "notes": "Kashmiri lamb curry with deep red color. Slow-cooked until tender. Authentic version uses dried Kashmiri chilies.",
+        "suggested_price": 22.99
+      },
+      {
+        "category": "Vegetarian",
+        "item_name": "Chana Masala",
+        "ingredients": [
+          {
+            "name": "Chickpeas (Dried)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomatoes (for gravy)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Onions (Red, for base)",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Garam Masala",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Amchur (Dry Mango Powder)",
+            "recipe_qty": 0.25,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Basmati Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Roti/Chapati",
+            "recipe_qty": 2,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Ghee (Clarified Butter)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 10,
+        "notes": "Chickpea curry, one of India's most popular dishes. Soak chickpeas overnight for best results.",
+        "suggested_price": 14.99
+      },
+      {
+        "category": "Biryani",
+        "item_name": "Chicken Biryani",
+        "ingredients": [
+          {
+            "name": "Chicken (Boneless, for Curries)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Basmati Rice (Premium)",
+            "recipe_qty": 10,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Yogurt (Plain, for marinades)",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Saffron Strands",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Fried Onions",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Biryani Masala",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Mint (Fresh)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cilantro (Fresh)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Raita",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 30,
+        "notes": "Layered rice dish with marinated chicken. Dum cooking (sealed pot) method preferred. Served with raita.",
+        "suggested_price": 19.99
+      },
+      {
+        "category": "Vegetarian",
+        "item_name": "Palak Paneer",
+        "ingredients": [
+          {
+            "name": "Paneer (Indian Cheese)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Spinach (Fresh)",
+            "recipe_qty": 10,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomatoes (for gravy)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Ginger (Fresh)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Garlic (Fresh)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Heavy Cream",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Basmati Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Naan Bread (Plain)",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 12,
+        "notes": "Paneer in creamy spinach gravy. Blanch spinach quickly to retain bright green color.",
+        "suggested_price": 16.99
+      },
+      {
+        "category": "Appetizers",
+        "item_name": "Samosa (2 pieces)",
+        "ingredients": [
+          {
+            "name": "Potatoes",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Peas (Frozen)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Samosa Pastry Dough",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cumin Seeds",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Coriander Powder",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Mint Chutney",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tamarind Chutney",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Frying Oil",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 8,
+        "notes": "Crispy fried pastry filled with spiced potatoes and peas. India's most popular street food.",
+        "suggested_price": 7.99
+      },
+      {
+        "category": "Tandoori",
+        "item_name": "Tandoori Chicken (Half)",
+        "ingredients": [
+          {
+            "name": "Chicken (with bone)",
+            "recipe_qty": 12,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Yogurt Marinade Base",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tandoori Marinade",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Lemon Juice",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Ginger-Garlic Paste",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Naan Bread (Plain)",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          },
+          {
+            "name": "Mint Chutney",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Onion Rings",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Lemon Wedges",
+            "recipe_qty": 2,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 10,
+        "notes": "Traditional clay oven roasted chicken. Marinate for at least 4 hours, preferably overnight.",
+        "suggested_price": 15.99
+      },
+      {
+        "category": "Bread",
+        "item_name": "Garlic Naan",
+        "ingredients": [
+          {
+            "name": "Naan Dough",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Garlic (Minced)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Butter",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Cilantro (Fresh)",
+            "recipe_qty": 0.2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tandoor/Griddle Cooking",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 3,
+        "notes": "Leavened flatbread cooked in tandoor. Brush with garlic butter after cooking.",
+        "suggested_price": 4.99
+      },
+      {
+        "category": "Dal",
+        "item_name": "Dal Makhani",
+        "ingredients": [
+          {
+            "name": "Black Lentils (Whole Urad)",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Kidney Beans (Rajma)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Butter",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Heavy Cream",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Tomatoes (for gravy)",
+            "recipe_qty": 4,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Ginger (Fresh)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Garlic (Fresh)",
+            "recipe_qty": 0.5,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Basmati Rice",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Naan Bread (Plain)",
+            "recipe_qty": 1,
+            "recipe_unit": "lb"
+          }
+        ],
+        "labor_minutes": 20,
+        "notes": "Creamy black lentils slow-cooked overnight for best flavor. Signature dish of Punjab.",
+        "suggested_price": 14.99
+      },
+      {
+        "category": "South Indian",
+        "item_name": "Masala Dosa",
+        "ingredients": [
+          {
+            "name": "Dosa Batter (Fermented)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Potatoes",
+            "recipe_qty": 6,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Onions (Red, for base)",
+            "recipe_qty": 2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Mustard Seeds",
+            "recipe_qty": 0.1,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Curry Leaves",
+            "recipe_qty": 0.2,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Sambar (Lentil Soup)",
+            "recipe_qty": 8,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Coconut Chutney",
+            "recipe_qty": 3,
+            "recipe_unit": "oz"
+          },
+          {
+            "name": "Ghee (Clarified Butter)",
+            "recipe_qty": 1,
+            "recipe_unit": "oz"
+          }
+        ],
+        "labor_minutes": 8,
+        "notes": "Crispy fermented crepe filled with spiced potatoes. South India's most famous breakfast dish.",
+        "suggested_price": 12.99
+      }
+    ]
+  }
+]
