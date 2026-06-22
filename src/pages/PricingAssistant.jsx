@@ -6,6 +6,7 @@ const MARKET_DATA_URLS = [
   import.meta.env.VITE_PRICING_ASSISTANT_MARKET_API,
   "/api/pricing-assistant/market/latest",
   "/api/market/latest",
+  `${import.meta.env.BASE_URL}data/pricing-assistant/market/latest.json`,
 ].filter(Boolean);
 
 const FRED_M2_URLS = [
@@ -896,6 +897,88 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
     setStatusMessage(`Loaded cost configuration: ${config.name}`);
   }
 
+  async function deleteCostConfig(config) {
+    if (supabase && user?.id && config.db_id) {
+      const { error } = await supabase
+        .from("pricing_assistant_cost_configs")
+        .delete()
+        .eq("id", config.db_id)
+        .eq("user_id", user.id);
+      if (error) {
+        setStatusMessage(error.message);
+        return;
+      }
+    }
+
+    setCostConfigs((current) => current.filter((item) => (item.db_id || item.id) !== (config.db_id || config.id)));
+    if ((activeCostConfigId === config.db_id || activeCostConfigId === config.id) && activeCostConfigName === config.name) {
+      setActiveCostConfigId(null);
+      setActiveCostConfigName("");
+    }
+    setModal(null);
+    setStatusMessage(`Deleted cost profile: ${config.name}`);
+  }
+
+  async function importLaborTiersFromShiftPlanner() {
+    if (!supabase || !user?.id) {
+      setStatusMessage("Sign in to import labor tiers from Shift Planner.");
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("shift_planner_schedules")
+      .select("name, schedule_data, updated_at")
+      .eq("user_id", user.id)
+      .order("updated_at", { ascending: false })
+      .limit(1);
+
+    if (error) {
+      setStatusMessage("Could not load Shift Planner schedules. Check the Shift Planner tables and RLS policies.");
+      return;
+    }
+
+    const schedule = data?.[0];
+    const employees = schedule?.schedule_data?.employees;
+    if (!Array.isArray(employees) || employees.length === 0) {
+      setStatusMessage("No employees found in your latest Shift Planner schedule.");
+      return;
+    }
+
+    const shifts = schedule.schedule_data?.shifts || {};
+    const hoursByEmployee = {};
+    Object.values(shifts).forEach((shift) => {
+      if (!shift?.emp_id) return;
+      hoursByEmployee[shift.emp_id] = (hoursByEmployee[shift.emp_id] || 0) + shiftHoursForImport(shift.start, shift.end);
+    });
+
+    const grouped = new Map();
+    employees.forEach((employee) => {
+      const wage = num(employee.wage);
+      if (!wage) return;
+      const role = employee.role || "Staff";
+      const hours = hoursByEmployee[employee.emp_id] || num(employee.max_hours || employee.max);
+      const key = `${role}-${wage}`;
+      const current = grouped.get(key) || { role, wage, hours_per_week: 0 };
+      current.hours_per_week += hours || 0;
+      grouped.set(key, current);
+    });
+
+    const tiers = Array.from(grouped.values()).map((tier) => ({
+      role: tier.role,
+      wage: formatNumberForInput(tier.wage),
+      hours_per_week: formatNumberForInput(tier.hours_per_week),
+    }));
+
+    if (!tiers.length) {
+      setStatusMessage("No hourly wages were found in your latest Shift Planner schedule.");
+      return;
+    }
+
+    setLaborTiers(tiers);
+    setActiveTab("advanced");
+    setStatusMessage(`Imported ${tiers.length} labor tier${tiers.length === 1 ? "" : "s"} from ${schedule.name || "Shift Planner"}.`);
+  }
+
   function updateIngredient(index, patch) {
     setIngredients((current) => current.map((ingredient, i) => (i === index ? { ...ingredient, ...patch } : ingredient)));
   }
@@ -941,9 +1024,11 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
   }
 
   function addToMenu() {
-    const menuName = menus[0]?.menu_name || "My Menu";
-    const targetMenu = menus.find((menu) => menu.id === activeMenuId) || menus[0] || blankMenu(menuName);
-    const item = serializeCurrentItem(builtInputs, {
+    setModal({ type: "add-to-menu", title: "Add to Menu" });
+  }
+
+  function currentSerializedItem() {
+    return serializeCurrentItem(builtInputs, {
       appFees,
       ccFees,
       laborTiers,
@@ -951,13 +1036,18 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
       packaging,
       form,
     });
+  }
+
+  function addCurrentItemToMenu(menu) {
+    const item = currentSerializedItem();
     const nextMenu = {
-      ...targetMenu,
-      items: [...(targetMenu.items || []), item],
+      ...menu,
+      items: [...(menu.items || []), item],
       updated_at: new Date().toISOString(),
     };
     setActiveMenuId(nextMenu.id);
     persistMenu(nextMenu);
+    setModal(null);
     setStatusMessage(`Added ${item.item_name} to ${nextMenu.menu_name}.`);
   }
 
@@ -965,13 +1055,42 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
     setModal({ type: "menu-name", title: "Create Menu", value: "My Menu" });
   }
 
-  function createNamedMenu(name) {
+  function createNamedMenu(name, options = {}) {
     const cleanName = String(name || "").trim();
     if (!cleanName) return;
     const menu = blankMenu(cleanName);
+    if (options.addCurrentItem) {
+      menu.items = [currentSerializedItem()];
+      menu.updated_at = new Date().toISOString();
+    }
     setActiveMenuId(menu.id);
     persistMenu(menu);
     setModal(null);
+    if (options.addCurrentItem) {
+      setStatusMessage(`Created ${menu.menu_name} and added ${menu.items[0].item_name}.`);
+    }
+  }
+
+  async function deleteMenu(menu) {
+    if (supabase && user?.id && menu.db_id) {
+      const { error } = await supabase
+        .from("pricing_assistant_menus")
+        .delete()
+        .eq("id", menu.db_id)
+        .eq("user_id", user.id);
+      if (error) {
+        setStatusMessage(error.message);
+        return;
+      }
+    }
+
+    setMenus((current) => current.filter((item) => (item.db_id || item.id) !== (menu.db_id || menu.id)));
+    if ((activeMenuId === menu.id || activeMenuId === menu.db_id) && activeMenuItemIndex !== null) {
+      setActiveMenuId(null);
+      setActiveMenuItemIndex(null);
+    }
+    setModal(null);
+    setStatusMessage(`Deleted ${menu.menu_name}.`);
   }
 
   function loadMenuItem(menu, index) {
@@ -1295,14 +1414,24 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
                 )}
                 <div className="inline-actions">
                   <button type="button" onClick={saveCostConfig}>{activeCostConfigName ? "Save Cost Profile" : "Create Cost Profile"}</button>
+                  <button type="button" onClick={importLaborTiersFromShiftPlanner}>Import Labor Tiers from Shift Planner</button>
                   <button type="button" onClick={() => setOverheadItems(DEFAULT_OVERHEAD)}>Reset Overhead Defaults</button>
                 </div>
                 {savedCostConfigs.length > 0 && (
                   <div className="saved-list">
                     {savedCostConfigs.map((config) => (
-                      <button key={config.id || config.db_id} type="button" className={(config.db_id || config.id) === activeCostConfigId ? "active" : ""} onClick={() => recallCostConfig(config)}>
-                        {config.name}
-                      </button>
+                      <div className="saved-pill" key={config.id || config.db_id}>
+                        <button type="button" className={(config.db_id || config.id) === activeCostConfigId ? "active" : ""} onClick={() => recallCostConfig(config)}>
+                          {config.name}
+                        </button>
+                        <button
+                          type="button"
+                          className="danger-lite"
+                          onClick={() => setModal({ type: "confirm-delete", title: "Delete Cost Profile", target: config, targetKind: "cost" })}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     ))}
                   </div>
                 )}
@@ -1395,7 +1524,15 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
                     <button type="button" onClick={loadSavedData}>Refresh</button>
                   </div>
                   {menus.length === 0 && <p className="muted-copy">No saved menus yet. Add your current item to create one quickly.</p>}
-                  {menus.map((menu) => <MenuPanel key={menu.id || menu.db_id} menu={menu} onLoad={loadMenuItem} onExport={exportCsv} />)}
+                  {menus.map((menu) => (
+                    <MenuPanel
+                      key={menu.id || menu.db_id}
+                      menu={menu}
+                      onLoad={loadMenuItem}
+                      onExport={exportCsv}
+                      onDelete={(target) => setModal({ type: "confirm-delete", title: "Delete Menu", target, targetKind: "menu" })}
+                    />
+                  ))}
                 </div>
               </>
             )}
@@ -1415,6 +1552,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
           setModal={setModal}
           onSaveCost={saveNamedCostConfig}
           onCreateMenu={createNamedMenu}
+          onAddToMenu={addCurrentItemToMenu}
           onResetBlankItem={() => {
             resetNewItem();
             continueNewItemToCosts();
@@ -1423,8 +1561,11 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
           templateItems={modalTemplateItems}
           onUseTemplate={(item) => useTemplate(item, { continueToCosts: true })}
           costConfigs={savedCostConfigs}
+          menus={menus}
           onSelectCost={selectNewItemCostConfig}
           onSkipCosts={skipNewItemCosts}
+          onDeleteMenu={deleteMenu}
+          onDeleteCost={deleteCostConfig}
         />
       )}
     </div>
@@ -1436,13 +1577,17 @@ function PricingModal({
   setModal,
   onSaveCost,
   onCreateMenu,
+  onAddToMenu,
   onResetBlankItem,
   onOpenTemplates,
   templateItems,
   onUseTemplate,
   costConfigs,
+  menus,
   onSelectCost,
   onSkipCosts,
+  onDeleteMenu,
+  onDeleteCost,
 }) {
   const isNameModal = modal.type === "cost-name" || modal.type === "menu-name";
   const [value, setValue] = useState(modal.value || "");
@@ -1454,7 +1599,7 @@ function PricingModal({
   function submitName(event) {
     event.preventDefault();
     if (modal.type === "cost-name") onSaveCost(value);
-    if (modal.type === "menu-name") onCreateMenu(value);
+    if (modal.type === "menu-name") onCreateMenu(value, { addCurrentItem: modal.addCurrentItem });
   }
 
   return (
@@ -1537,6 +1682,48 @@ function PricingModal({
             <div className="pricing-modal-actions">
               <button type="button" onClick={() => setModal({ type: "cost-name", title: "Name Cost Profile", value: "Restaurant Costs" })}>Create Profile</button>
               <button type="button" onClick={onSkipCosts}>Skip</button>
+            </div>
+          </div>
+        )}
+
+        {modal.type === "add-to-menu" && (
+          <div className="pricing-modal-body">
+            <p className="muted-copy">Choose where this priced item should be saved, or create a new menu for it.</p>
+            {menus.length > 0 ? (
+              <div className="modal-list">
+                {menus.map((menu) => (
+                  <button key={menu.db_id || menu.id} type="button" onClick={() => onAddToMenu(menu)}>
+                    <strong>{menu.menu_name}</strong>
+                    <span>{(menu.items || []).length} saved item{(menu.items || []).length === 1 ? "" : "s"}</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="upgrade-note">No menus saved yet. Create one and this item will be added to it.</div>
+            )}
+            <div className="pricing-modal-actions">
+              <button type="button" onClick={() => setModal({ type: "menu-name", title: "Create Menu", value: "My Menu", addCurrentItem: true })}>
+                Create New Menu
+              </button>
+              <button type="button" onClick={() => setModal(null)}>Cancel</button>
+            </div>
+          </div>
+        )}
+
+        {modal.type === "confirm-delete" && (
+          <div className="pricing-modal-body">
+            <p className="muted-copy">
+              Delete {modal.targetKind === "menu" ? modal.target?.menu_name : modal.target?.name}? This cannot be undone.
+            </p>
+            <div className="pricing-modal-actions">
+              <button type="button" onClick={() => setModal(null)}>Cancel</button>
+              <button
+                type="button"
+                className="danger-lite"
+                onClick={() => (modal.targetKind === "menu" ? onDeleteMenu(modal.target) : onDeleteCost(modal.target))}
+              >
+                Delete
+              </button>
             </div>
           </div>
         )}
@@ -1691,7 +1878,7 @@ function EditableRows({ title, rows, setRows, columns, newRow, className = "" })
   );
 }
 
-function MenuPanel({ menu, onLoad, onExport }) {
+function MenuPanel({ menu, onLoad, onExport, onDelete }) {
   const totals = (menu.items || []).map((item) => calculatePricing(normalizeSavedItem(item)));
   const avgCost = totals.length ? totals.reduce((sum, result) => sum + result.trueCost, 0) / totals.length : 0;
   const avgRecommended = totals.length ? totals.reduce((sum, result) => sum + result.recommendedPrice, 0) / totals.length : 0;
@@ -1702,7 +1889,10 @@ function MenuPanel({ menu, onLoad, onExport }) {
           <h3>{menu.menu_name}</h3>
           <p>{(menu.items || []).length} items · avg cost {money(avgCost)} · avg recommended {money(avgRecommended)}</p>
         </div>
-        <button type="button" onClick={() => onExport(menu)}>Export CSV</button>
+        <div className="inline-actions">
+          <button type="button" onClick={() => onExport(menu)}>Export CSV</button>
+          <button type="button" className="danger-lite" onClick={() => onDelete(menu)}>Delete</button>
+        </div>
       </div>
       <div className="menu-items">
         {(menu.items || []).map((item, index) => {
@@ -1723,6 +1913,16 @@ function batchMinutes(hours, minutes, batchYield) {
   const total = Math.max(0, num(hours) * 60 + num(minutes));
   const yielded = Math.max(0, num(batchYield));
   return total > 0 && yielded > 0 ? total / yielded : 0;
+}
+
+function shiftHoursForImport(start, end) {
+  if (!start || !end) return 0;
+  const [sh, sm] = String(start).split(":").map(Number);
+  const [eh, em] = String(end).split(":").map(Number);
+  if (![sh, sm, eh, em].every(Number.isFinite)) return 0;
+  let mins = eh * 60 + em - (sh * 60 + sm);
+  if (mins < 0) mins += 1440;
+  return mins / 60;
 }
 
 function blendedFee(rows) {

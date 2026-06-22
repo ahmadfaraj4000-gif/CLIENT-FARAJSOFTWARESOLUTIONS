@@ -437,6 +437,28 @@
   color: var(--pa-teal);
 }
 
+.saved-pill {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.saved-pill > button:first-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.danger-lite {
+  border-color: rgba(239, 119, 119, 0.32) !important;
+  background: rgba(239, 119, 119, 0.09) !important;
+  color: #ffb4b4 !important;
+}
+
+.danger-lite:hover {
+  border-color: rgba(239, 119, 119, 0.55) !important;
+  background: rgba(239, 119, 119, 0.16) !important;
+}
+
 .toggle-line {
   display: flex;
   align-items: center;
