@@ -1394,6 +1394,7 @@ function buildSuggestedSchedule() {
                 Your employees, shifts, revenue targets, and saved schedules are stored securely under your logged-in account.
               </p>
               {statusMessage && <div className="portal-status">{statusMessage}</div>}
+              <a className="dashboard-return-btn" href="/">Software Dashboard</a>
             </div>
 
           <div className="planner-actions-clean">

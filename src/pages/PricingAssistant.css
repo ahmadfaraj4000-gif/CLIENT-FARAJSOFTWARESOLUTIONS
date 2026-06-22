@@ -194,8 +194,23 @@
   border-color: var(--pa-line);
 }
 
+.portal-return-link {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--pa-line);
+  background: rgba(255, 255, 255, 0.065);
+  color: var(--pa-text);
+  text-decoration: none;
+  font-weight: 850;
+}
+
 .pricing-app button:hover,
-.pricing-app button.active {
+.pricing-app button.active,
+.portal-return-link:hover {
   border-color: rgba(34, 211, 197, 0.38);
   background: rgba(34, 211, 197, 0.11);
 }

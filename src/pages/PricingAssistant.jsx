@@ -1322,6 +1322,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
             <h1>{form.item_name || "Menu Item"}</h1>
           </div>
           <div className="pricing-toolbar-actions">
+            <a className="portal-return-link" href="/">Software Dashboard</a>
             <button type="button" onClick={startNewItem}>New Item</button>
             <button type="button" onClick={addToMenu}>Add to Menu</button>
             {activeMenuItemIndex !== null && <button type="button" onClick={saveBackToMenu}>Save Changes</button>}
