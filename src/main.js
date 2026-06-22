@@ -39,6 +39,7 @@ const products = [
     description:
       'Build weekly schedules, estimate labor cost, compare against revenue, and spot over-budget days.',
     price: '$14.99/mo',
+    trialDays: 7,
     stripeLink:
       import.meta.env.VITE_STRIPE_SHIFT_PLANNER_LINK ||
       'https://buy.stripe.com/28E4gBfjk5xa7t9gcD5Ne0e',
@@ -286,7 +287,7 @@ function productCard(product) {
           !active && product.trialDays
             ? `<button class="btn trial" type="button" data-trial-product="${product.id}">
                 Start ${product.trialDays}-day trial
-                <span class="btn-sub">one trial per email</span>
+                <span class="btn-sub">try before subscribing</span>
               </button>`
             : ''
         }
