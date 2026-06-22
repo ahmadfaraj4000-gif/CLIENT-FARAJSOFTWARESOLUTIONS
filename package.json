@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "vite",
+    "market:pricing-assistant": "node scripts/generate-pricing-assistant-market.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },
