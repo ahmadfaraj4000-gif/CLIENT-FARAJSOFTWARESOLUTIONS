@@ -1,18 +1,20 @@
-# Faraj Software Solutions Client Portal
+# Reimage Tech Client Portal
+
+The active Shift Planner now includes NFC attendance and business workspaces. See [pilot deployment](docs/PILOT-SETUP.md) and the [root README](../README.md) for the current setup; legacy setup notes follow.
 
 Vite client portal for `login.farajsoftwaresolutions.com`.
 
 ## What this includes
 
 - Supabase-ready login and signup
-- Faraj Software Solutions styled client portal
+- Reimage Tech styled client portal
 - Software cards:
   - Pricing Assistant Pro
   - Shift Planner
   - Spa Cost Estimator
-- Placeholder Stripe subscription links
-- Locked app buttons until subscription access is connected
-- Temporary dev unlock buttons for front-end testing only
+- Existing Pricing Assistant checkout links and managed Shift Planner pilot access
+- Product access enforced by account or business membership
+- Separate NFC/QR employee clock with revocable phone enrollment
 
 ## Setup
 
@@ -47,7 +49,7 @@ login.farajsoftwaresolutions.com
 
 ## Important next step
 
-The current Stripe links are placeholders. The real production flow should be:
+Pricing Assistant retains its existing checkout integration. Shift Planner is manually activated for pilot businesses. The payment flow for paid products is:
 
 1. Customer signs in.
 2. Customer clicks Stripe subscription link.
@@ -104,3 +106,9 @@ public/data/pricing-assistant/market/latest.json
 Vite copies that file into `dist`, so the deployed browser can read M2 without a live API server and without exposing the API key.
 
 For server-backed production, the client portal host can serve `/api/pricing-assistant/market/latest` instead. Set `FRED_API_KEY` as a server environment variable only; do not put it in the Vite client bundle.
+
+## Standalone repository deployment
+
+This repository owns the client portal and Supabase workforce migrations. Its shared branding assets are under `shared/`; it builds without the public or admin repositories. GitHub Actions deploys `main` to https://login.reimagebstech.com. Apply and verify the Supabase migrations and `time-clock` function before publishing the workforce client release.
+
+Run `npm run test:database` for the disposable PostgreSQL integration suite. `npm run test:browser` additionally starts an isolated Vite server and runs browser workflows using fake local Supabase configuration. Tests never use `.env.local` production credentials. PostgreSQL defaults to `/opt/homebrew/opt/postgresql@14/bin`; override `POSTGRES_BIN` as needed. Browser tests use installed Google Chrome.

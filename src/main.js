@@ -1,9 +1,8 @@
+import { brand } from '../shared/brand.js';
 import { createClient } from '@supabase/supabase-js';
 import './styles.css';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import ShiftPlanner from './pages/ShiftPlanner.jsx';
-import PricingAssistant from './pages/PricingAssistant.jsx';
 import './pages/ShiftPlanner.css';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -35,11 +34,11 @@ const products = [
   {
     id: 'shift-planner',
     name: 'Shift Planner',
-    eyebrow: 'Labor scheduling',
+    eyebrow: 'Managed pilot',
     description:
-      'Build weekly schedules, estimate labor cost, compare against revenue, and spot over-budget days.',
-    price: '$14.99/mo',
-    trialDays: 7,
+      'Schedule your team, clock in with NFC, and compare scheduled versus actual labor costs.',
+    price: 'Pilot access',
+    trialDays: 0,
     stripeLink:
       import.meta.env.VITE_STRIPE_SHIFT_PLANNER_LINK ||
       'https://buy.stripe.com/28E4gBfjk5xa7t9gcD5Ne0e',
@@ -64,7 +63,9 @@ const app = document.querySelector('#app');
 const params = new URLSearchParams(window.location.search);
 let countdownTimer = null;
 
-if (params.get('app') === 'shift-planner') {
+if (params.get('app') === 'clock') {
+  import('./workforce/Clock.jsx').then(({default: Clock}) => createRoot(app).render(React.createElement(Clock, { supabase })));
+} else if (params.get('app') === 'shift-planner') {
   renderShiftPlannerRoute();
 } else if (params.get('app') === 'pricing-assistant') {
   renderPricingAssistantRoute();
@@ -177,6 +178,8 @@ async function loadSubscriptions() {
     }
   });
 
+  const { data: workforceAccess } = await supabase.rpc('rt_bootstrap');
+  if (workforceAccess?.businesses?.length) activeMap.shift_planner ||= { product: 'shift_planner', status: 'active', access_source: 'business_membership' };
   state.subscriptions = activeMap;
   state.checkingSubscriptions = false;
 }
@@ -211,14 +214,14 @@ function render() {
   app.innerHTML = `
     <div class="bg">
       <header class="portal-header">
-        <a class="portal-brand" href="https://farajsoftwaresolutions.com">
+        <a class="portal-brand" href="${brand.siteUrl}">
           <div class="mark" aria-hidden="true">
             <span class="mark-bar b1"></span>
             <span class="mark-bar b2"></span>
             <span class="mark-bar b3"></span>
           </div>
           <div>
-            <div class="brand-title">Faraj Software Solutions</div>
+            <div class="brand-title">Reimage Tech</div>
             <div class="brand-sub">Client Software Portal</div>
           </div>
         </a>
@@ -226,7 +229,7 @@ function render() {
         ${
           state.user
             ? `<button class="nav-btn" id="logoutBtn" type="button">Log out</button>`
-            : `<a class="nav-btn" href="https://farajsoftwaresolutions.com">Back to site</a>`
+            : `<a class="nav-btn" href="${brand.siteUrl}">Back to site</a>`
         }
       </header>
 
@@ -247,7 +250,7 @@ function authView() {
         <div class="demo-eyebrow">Secure client access</div>
         <h1>Log in to manage your business software.</h1>
         <p>
-          This portal controls access to Faraj Software Solutions web apps.
+          This portal controls access to Reimage Tech web apps.
           Users can create an account, subscribe, and access paid tools from one dashboard.
         </p>
       </section>
@@ -350,16 +353,13 @@ function productCard(product) {
             : ''
         }
 
-        <a class="btn primary" href="${buildStripeUrl(product)}" target="_blank" rel="noopener">
-          Subscribe with Stripe
-          <span class="btn-sub">secure checkout</span>
-        </a>
+        ${product.id === 'shift-planner' ? `<a class="btn primary" href="mailto:${brand.contactEmail}?subject=Shift%20Planner%20pilot">Request pilot access<span class="btn-sub">Set up your business with Reimage Tech</span></a>` : `<a class="btn primary" href="${buildStripeUrl(product)}" target="_blank" rel="noopener">Subscribe with Stripe<span class="btn-sub">secure checkout</span></a>`}
 
         ${
           active
             ? `<a class="btn secondary" href="${product.appLink}">Open App</a>`
             : `<button class="btn locked" type="button" data-locked-product="${product.id}">
-                Locked until paid
+                ${product.id === 'shift-planner' ? 'Pilot access required' : 'Locked until paid'}
               </button>`
         }
       </div>
@@ -383,6 +383,7 @@ function bindEvents() {
   document.querySelectorAll('[data-locked-product]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const product = products.find((item) => item.id === btn.dataset.lockedProduct);
+      if (product?.id === 'shift-planner') { state.message = 'Ask Reimage Tech to activate your business pilot or ask your business owner to invite you as a manager.'; render(); return; }
       state.message = `${product?.name || 'This app'} is locked until your subscription is active. If you already paid, refresh the page in a moment.`;
       render();
     });
@@ -530,30 +531,8 @@ async function renderShiftPlannerRoute() {
     return;
   }
 
-  const { data: sub, error } = await supabase
-    .from('subscriptions')
-    .select('product, status, current_period_end, expires_at')
-    .eq('user_id', user.id)
-    .eq('product', 'shift_planner')
-    .in('status', ['active', 'trialing', 'paid'])
-    .limit(1)
-    .maybeSingle();
-
-  if (error) {
-    app.innerHTML = `<main class="portal-shell"><section class="auth-card"><p>${error.message}</p></section></main>`;
-    return;
-  }
-
-  const notExpired =
-    (!sub?.current_period_end || new Date(sub.current_period_end).getTime() > Date.now()) &&
-    (!sub?.expires_at || new Date(sub.expires_at).getTime() > Date.now());
-
-  if (!sub || !notExpired) {
-    window.location.href = '/';
-    return;
-  }
-
-  createRoot(app).render(React.createElement(ShiftPlanner, { user, supabase }));
+  const { default: Workforce } = await import('./workforce/Workforce.jsx');
+  createRoot(app).render(React.createElement(Workforce, { user, supabase }));
 }
 
 async function renderPricingAssistantRoute() {
@@ -594,5 +573,8 @@ async function renderPricingAssistantRoute() {
     return;
   }
 
+  const { default: PricingAssistant } = await import('./pages/PricingAssistant.jsx');
   createRoot(app).render(React.createElement(PricingAssistant, { user, supabase, tier: 'pro' }));
 }
+
+import '../shared/reimage.css';

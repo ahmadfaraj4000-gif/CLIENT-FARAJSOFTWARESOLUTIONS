@@ -5,7 +5,7 @@ const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const EMP_COLORS = [
   { bg: "#1a3a2a", fg: "#2ecc71" },
-  { bg: "#1a2a3a", fg: "#22d3c5" },
+  { bg: "#1a2a3a", fg: "#0877e8" },
   { bg: "#2a1a3a", fg: "#9b59b6" },
   { bg: "#3a2a3a", fg: "#9b59b6" },
   { bg: "#3a2a1a", fg: "#f39c12" },

@@ -3,12 +3,21 @@
     "dev": "vite",
     "market:pricing-assistant": "node scripts/generate-pricing-assistant-market.mjs",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test tests/*.test.mjs",
+    "test:database": "node scripts/test-database.mjs",
+    "test:browser": "REIMAGE_RUN_BROWSER=1 node scripts/test-database.mjs"
   },
   "dependencies": {
+    "@js-temporal/polyfill": "^0.5.1",
     "@supabase/supabase-js": "^2.104.1",
+    "qrcode": "^1.5.4",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "vite": "^5.4.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "pg": "^8.23.1"
   }
 }

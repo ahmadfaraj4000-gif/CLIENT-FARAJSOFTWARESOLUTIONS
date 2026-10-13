@@ -1,0 +1,14 @@
+{
+  "updated_at": "2026-06-22T14:34:28.365Z",
+  "indicators": [
+    {
+      "series": "M2SL",
+      "name": "Monetary Backdrop (M2)",
+      "current": 22804.5,
+      "previous": 21775.7,
+      "change": 4.724532391610828,
+      "date": "2026-04-01",
+      "source": "FRED"
+    }
+  ]
+}

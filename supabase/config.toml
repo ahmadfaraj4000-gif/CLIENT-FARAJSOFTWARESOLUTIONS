@@ -1,0 +1,3 @@
+project_id = "reimage-tech"
+[functions.time-clock]
+verify_jwt = false

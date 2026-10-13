@@ -1,3 +1,4 @@
+import PricingLaborImport from "../workforce/PricingLaborImport.jsx";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./PricingAssistant.css";
 import PRICING_TEMPLATES from "./pricingAssistantTemplates.json";
@@ -436,6 +437,9 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
   const [form, setForm] = useState(DEFAULT_FORM);
   const [ingredients, setIngredients] = useState(STARTER_INGREDIENTS);
   const [laborTiers, setLaborTiers] = useState([]);
+  const [laborImportOpen,setLaborImportOpen] = useState(false);
+  const [laborImportSource,setLaborImportSource] = useState("");
+
   const [overheadItems, setOverheadItems] = useState(STARTER_OVERHEAD);
   const [packaging, setPackaging] = useState(STARTER_PACKAGING);
   const [appFees, setAppFees] = useState(DEFAULT_APP_FEES);
@@ -635,6 +639,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
             form,
             ingredients,
             laborTiers,
+      laborImportSource,
             overheadItems,
             packaging,
             appFees,
@@ -658,6 +663,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
     form,
     ingredients,
     laborTiers,
+    laborImportSource,
     overheadItems,
     packaging,
     appFees,
@@ -674,6 +680,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
     const config = buildCostConfig(activeCostConfigName.trim(), {
       id: activeCostConfigId || slugId(activeCostConfigName),
       laborTiers,
+      laborImportSource,
       overheadItems,
       appFees,
       ccFees,
@@ -690,7 +697,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
 
     return () => window.clearTimeout(handle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [savedDataLoaded, laborTiers, overheadItems, appFees, ccFees, packaging, form, activeCostConfigId, activeCostConfigName]);
+  }, [savedDataLoaded, laborTiers, laborImportSource, overheadItems, appFees, ccFees, packaging, form, activeCostConfigId, activeCostConfigName]);
 
   useEffect(() => {
     if (!savedDataLoaded || activeMenuItemIndex === null || !activeMenuId) return;
@@ -701,6 +708,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
       appFees,
       ccFees,
       laborTiers,
+      laborImportSource,
       overheadItems,
       packaging,
       form,
@@ -719,7 +727,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
 
     return () => window.clearTimeout(handle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [savedDataLoaded, activeMenuId, activeMenuItemIndex, builtInputs, appFees, ccFees, laborTiers, overheadItems, packaging, form]);
+  }, [savedDataLoaded, activeMenuId, activeMenuItemIndex, builtInputs, appFees, ccFees, laborTiers, laborImportSource, overheadItems, packaging, form]);
 
   const templateItems = useMemo(() => {
     const term = templateSearch.trim().toLowerCase();
@@ -779,24 +787,9 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
     }
 
     setShiftPlannerAccess((current) => ({ ...current, loading: true }));
-    const { data, error } = await supabase
-      .from("subscriptions")
-      .select("product, status, current_period_end, expires_at")
-      .eq("user_id", user.id)
-      .eq("product", "shift_planner")
-      .in("status", ["active", "trialing", "paid"]);
-
-    if (error) {
-      setShiftPlannerAccess({ loading: false, active: false, error: error.message });
-      return false;
-    }
-
-    const active = (data || []).some((sub) => {
-      return (
-        (!sub.current_period_end || new Date(sub.current_period_end).getTime() > Date.now()) &&
-        (!sub.expires_at || new Date(sub.expires_at).getTime() > Date.now())
-      );
-    });
+    const { data, error } = await supabase.rpc("rt_bootstrap", {});
+    if (error) {setShiftPlannerAccess({loading:false,active:false});return false;}
+    const active = (data?.businesses || []).some(b=>b.entitled);
 
     setShiftPlannerAccess({ loading: false, active });
     return active;
@@ -808,6 +801,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
       if (!draft || draft.version !== DRAFT_VERSION) return;
       if (draft.form) setForm((current) => ({ ...current, ...draft.form }));
       if (Array.isArray(draft.ingredients)) setIngredients(draft.ingredients);
+      setLaborImportSource(draft.laborImportSource || "");
       if (Array.isArray(draft.laborTiers)) setLaborTiers(draft.laborTiers);
       if (Array.isArray(draft.overheadItems)) setOverheadItems(draft.overheadItems);
       if (Array.isArray(draft.packaging)) setPackaging(draft.packaging);
@@ -869,6 +863,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
     const config = buildCostConfig(cleanName, {
       id: activeCostConfigId || slugId(cleanName),
       laborTiers,
+      laborImportSource,
       overheadItems,
       appFees,
       ccFees,
@@ -918,6 +913,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
 
   function recallCostConfig(config) {
     setLaborTiers(config.labor_tiers || []);
+    setLaborImportSource(config.labor_source || "");
     setOverheadItems(config.overhead_items || []);
     setPackaging(config.packaging?.length ? config.packaging : STARTER_PACKAGING);
     setAppFees(config.app_fees?.length ? config.app_fees : DEFAULT_APP_FEES);
@@ -952,71 +948,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
     setStatusMessage(`Deleted cost profile: ${config.name}`);
   }
 
-  async function importLaborTiersFromShiftPlanner() {
-    if (!supabase || !user?.id) {
-      setStatusMessage("Sign in to import labor tiers from Shift Planner.");
-      return;
-    }
-
-    const hasAccess = shiftPlannerAccess.active || (await loadShiftPlannerAccess());
-    if (!hasAccess) {
-      setStatusMessage("Shift Planner access is required before importing labor tiers.");
-      return;
-    }
-
-    const { data, error } = await supabase
-      .from("shift_planner_schedules")
-      .select("name, schedule_data, updated_at")
-      .eq("user_id", user.id)
-      .order("updated_at", { ascending: false })
-      .limit(1);
-
-    if (error) {
-      setStatusMessage("Could not load Shift Planner schedules. Check the Shift Planner tables and RLS policies.");
-      return;
-    }
-
-    const schedule = data?.[0];
-    const employees = schedule?.schedule_data?.employees;
-    if (!Array.isArray(employees) || employees.length === 0) {
-      setStatusMessage("No employees found in your latest Shift Planner schedule.");
-      return;
-    }
-
-    const shifts = schedule.schedule_data?.shifts || {};
-    const hoursByEmployee = {};
-    Object.values(shifts).forEach((shift) => {
-      if (!shift?.emp_id) return;
-      hoursByEmployee[shift.emp_id] = (hoursByEmployee[shift.emp_id] || 0) + shiftHoursForImport(shift.start, shift.end);
-    });
-
-    const grouped = new Map();
-    employees.forEach((employee) => {
-      const wage = num(employee.wage);
-      if (!wage) return;
-      const role = employee.role || "Staff";
-      const hours = hoursByEmployee[employee.emp_id] || num(employee.max_hours || employee.max);
-      const key = `${role}-${wage}`;
-      const current = grouped.get(key) || { role, wage, hours_per_week: 0 };
-      current.hours_per_week += hours || 0;
-      grouped.set(key, current);
-    });
-
-    const tiers = Array.from(grouped.values()).map((tier) => ({
-      role: tier.role,
-      wage: formatNumberForInput(tier.wage),
-      hours_per_week: formatNumberForInput(tier.hours_per_week),
-    }));
-
-    if (!tiers.length) {
-      setStatusMessage("No hourly wages were found in your latest Shift Planner schedule.");
-      return;
-    }
-
-    setLaborTiers(tiers);
-    setActiveTab("advanced");
-    setStatusMessage(`Imported ${tiers.length} labor tier${tiers.length === 1 ? "" : "s"} from ${schedule.name || "Shift Planner"}.`);
-  }
+  function importLaborTiersFromShiftPlanner() {setLaborImportOpen(true);}
 
   function updateIngredient(index, patch) {
     setIngredients((current) => current.map((ingredient, i) => (i === index ? { ...ingredient, ...patch } : ingredient)));
@@ -1071,6 +1003,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
       appFees,
       ccFees,
       laborTiers,
+      laborImportSource,
       overheadItems,
       packaging,
       form,
@@ -1158,6 +1091,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
     setForm({ ...DEFAULT_FORM, ...(item.ui?.form || {}), ...deserializeForm(item) });
     setIngredients(item.ingredients || []);
     setLaborTiers(item.ui?.laborTiers || []);
+    setLaborImportSource(item.ui?.laborImportSource || "");
     setOverheadItems(item.ui?.overheadItems || []);
     setPackaging(item.ui?.packaging || []);
     setAppFees(item.ui?.appFees || DEFAULT_APP_FEES);
@@ -1175,6 +1109,7 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
       appFees,
       ccFees,
       laborTiers,
+      laborImportSource,
       overheadItems,
       packaging,
       form,
@@ -1462,10 +1397,14 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
                     Name a cost profile first, then labor, overhead, packaging, fees, and basic assumptions will autosave into that profile.
                   </div>
                 )}
+                {laborImportOpen && <PricingLaborImport supabase={supabase} onClose={()=>setLaborImportOpen(false)} onImport={result=>{
+                  setLaborTiers(result.tiers);setLaborImportSource(result.label);setLaborImportOpen(false);setStatusMessage(`Imported labor: ${result.label}`);
+                }}/>}
+                {laborImportSource && <p>Labor source: {laborImportSource}. Effective hourly cost includes overtime and wage changes.</p>}
                 <EditableRows
                   title="Labor tiers"
                   rows={laborTiers}
-                  setRows={setLaborTiers}
+                  setRows={next=>{setLaborTiers(next);setLaborImportSource(current=>current&&!current.endsWith(" · manually edited")?current+" · manually edited":current);}}
                   columns={[["role", "Role"], ["wage", "Wage"], ["hours_per_week", "Hours/wk"]]}
                   newRow={{ role: "", wage: "", hours_per_week: "" }}
                   headerAction={
@@ -1489,10 +1428,10 @@ export default function PricingAssistant({ user, supabase, tier = "standard" }) 
                 </div>
                 <div className={shiftPlannerAccess.active ? "integration-note active" : "integration-note"}>
                   {shiftPlannerAccess.loading
-                    ? "Checking whether this account owns Shift Planner."
+                    ? "Checking your business Shift Planner access."
                     : shiftPlannerAccess.active
-                      ? "Shift Planner connected. Import will use roles, wages, and scheduled/max hours from your latest saved schedule."
-                      : "Shift Planner is not active on this account, so labor tier import is locked."}
+                      ? "Shift Planner connected. Preview published, approved actual, or forecast labor for a selected business and week. Both product subscriptions are required."
+                      : "An active business Shift Planner subscription is required for labor imports."}
                 </div>
                 {savedCostConfigs.length > 0 && (
                   <div className="saved-list">
@@ -2019,16 +1958,6 @@ function batchMinutes(hours, minutes, batchYield) {
   return total > 0 && yielded > 0 ? total / yielded : 0;
 }
 
-function shiftHoursForImport(start, end) {
-  if (!start || !end) return 0;
-  const [sh, sm] = String(start).split(":").map(Number);
-  const [eh, em] = String(end).split(":").map(Number);
-  if (![sh, sm, eh, em].every(Number.isFinite)) return 0;
-  let mins = eh * 60 + em - (sh * 60 + sm);
-  if (mins < 0) mins += 1440;
-  return mins / 60;
-}
-
 function blendedFee(rows) {
   const values = rows.map((row) => num(row.pct)).filter((value) => value > 0);
   return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length / 100 : 0;
@@ -2086,6 +2015,7 @@ function buildCostConfig(name, data) {
     created_at: data.created_at || new Date().toISOString(),
     updated_at: new Date().toISOString(),
     labor_tiers: data.laborTiers,
+    labor_source: data.laborImportSource || "",
     overhead_items: data.overheadItems,
     packaging: data.packaging,
     app_fees: data.appFees,
