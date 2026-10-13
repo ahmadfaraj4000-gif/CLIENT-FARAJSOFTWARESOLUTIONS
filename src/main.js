@@ -1,3 +1,4 @@
+import { brand } from '../shared/brand.js';
 import { createClient } from '@supabase/supabase-js';
 import './styles.css';
 import React from 'react';
@@ -211,14 +212,14 @@ function render() {
   app.innerHTML = `
     <div class="bg">
       <header class="portal-header">
-        <a class="portal-brand" href="https://farajsoftwaresolutions.com">
+        <a class="portal-brand" href="${brand.siteUrl}">
           <div class="mark" aria-hidden="true">
             <span class="mark-bar b1"></span>
             <span class="mark-bar b2"></span>
             <span class="mark-bar b3"></span>
           </div>
           <div>
-            <div class="brand-title">Faraj Software Solutions</div>
+            <div class="brand-title">Reimage Tech</div>
             <div class="brand-sub">Client Software Portal</div>
           </div>
         </a>
@@ -226,7 +227,7 @@ function render() {
         ${
           state.user
             ? `<button class="nav-btn" id="logoutBtn" type="button">Log out</button>`
-            : `<a class="nav-btn" href="https://farajsoftwaresolutions.com">Back to site</a>`
+            : `<a class="nav-btn" href="${brand.siteUrl}">Back to site</a>`
         }
       </header>
 
@@ -247,7 +248,7 @@ function authView() {
         <div class="demo-eyebrow">Secure client access</div>
         <h1>Log in to manage your business software.</h1>
         <p>
-          This portal controls access to Faraj Software Solutions web apps.
+          This portal controls access to Reimage Tech web apps.
           Users can create an account, subscribe, and access paid tools from one dashboard.
         </p>
       </section>
@@ -596,3 +597,5 @@ async function renderPricingAssistantRoute() {
 
   createRoot(app).render(React.createElement(PricingAssistant, { user, supabase, tier: 'pro' }));
 }
+
+import '../shared/reimage.css';
