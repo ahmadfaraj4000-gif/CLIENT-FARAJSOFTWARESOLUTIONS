@@ -227,8 +227,8 @@ h2 {
 }
 
 .auth-tabs button.active {
-  background: linear-gradient(135deg, var(--teal), var(--teal2));
-  color: #071426;
+  background: #0877e8;
+  color: #fff;
 }
 
 .auth-muted {
@@ -349,7 +349,7 @@ h2 {
 }
 
 .trial-countdown strong {
-  color: #ffd166;
+  color: #995008;
   font-size: 14px;
   font-weight: 950;
   white-space: nowrap;
