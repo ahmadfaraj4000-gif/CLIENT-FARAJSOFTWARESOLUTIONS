@@ -39,7 +39,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #071426;
+  color: #fff;
   background: linear-gradient(135deg, var(--teal), var(--teal2));
   font-weight: 950;
   font-size: 12px;
@@ -99,7 +99,7 @@
 }
 
 .planner-sidebar {
-  background: rgba(9,17,27,.62);
+  background: #fff;
   border-right: 1px solid #dfe5ec;
   padding: 16px;
   overflow: auto;
@@ -108,7 +108,7 @@
 .planner-main {
   min-width: 0;
   padding: 16px;
-  background: rgba(11,22,36,.28);
+  background: #fff;
 }
 
 .mini-label {
@@ -179,7 +179,7 @@
 
 .small-btn.success {
   border-color: rgba(76,175,80,.35);
-  color: #c7ffcf;
+  color: #216a43;
 }
 
 .button-row {
@@ -415,7 +415,7 @@
   gap: 9px;
   align-items: center;
   padding: 12px;
-  background: rgba(15,34,54,.94);
+  background: #fff;
   border-right: 1px solid #dfe5ec;
   border-bottom: 1px solid #dfe5ec;
 }
@@ -485,7 +485,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  color: #f39c12;
+  color: #995008;
   background: rgba(243,156,18,.06);
   border: 1px dashed rgba(243,156,18,.24);
   font-weight: 950;
@@ -495,7 +495,7 @@
 .suggestions {
   margin-top: 12px;
   border: 1px solid #dfe5ec;
-  background: rgba(9,17,27,.54);
+  background: #fff;
   border-radius: 16px;
   padding: 12px;
 }
