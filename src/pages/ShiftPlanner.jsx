@@ -4,14 +4,14 @@ import "./ShiftPlanner.css";
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const EMP_COLORS = [
-  { bg: "#1a3a2a", fg: "#2ecc71" },
-  { bg: "#1a2a3a", fg: "#0877e8" },
-  { bg: "#2a1a3a", fg: "#9b59b6" },
-  { bg: "#3a2a3a", fg: "#9b59b6" },
-  { bg: "#3a2a1a", fg: "#f39c12" },
-  { bg: "#2a1a1a", fg: "#e74c3c" },
-  { bg: "#1a2a1a", fg: "#27ae60" },
-  { bg: "#1a1a3a", fg: "#3498db" },
+  { bg: "#eaf7ef", fg: "#216a43" },
+  { bg: "#eaf3ff", fg: "#075db5" },
+  { bg: "#f2ecfb", fg: "#70429c" },
+  { bg: "#fcebf4", fg: "#9c376c" },
+  { bg: "#fff2e8", fg: "#995008" },
+  { bg: "#fdeceb", fg: "#a12626" },
+  { bg: "#eef6e6", fg: "#4a6b25" },
+  { bg: "#e7f5fa", fg: "#166783" },
 ];
 
 const emptyState = {
